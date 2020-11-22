@@ -1,0 +1,7 @@
+.btn {
+  margin: 10px auto 0 auto;
+  display: block;
+  padding: 5px 10px;
+  background-color: dodgerblue;
+  border:none;
+}

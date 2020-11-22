@@ -1,8 +1,9 @@
 import classes from "./item.module.css";
+import Anchor from './anchor/anchor';
 
 const item = (props) => (
   <li className={classes.Item}>
-    <a className={classes.Link} href="/">{props.children}</a>
+    <Anchor>{props.children}</Anchor>
   </li>
 );
 

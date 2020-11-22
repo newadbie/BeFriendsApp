@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../components/navbar/navbar";
+import Register from './../register/Register';
+
 
 const App = () => {
   const [getItemsState, setItemsState] = useState({
@@ -9,6 +11,7 @@ const App = () => {
   return (
     <React.Fragment>
       <Navbar items={getItemsState.items} />
+      <Register />
     </React.Fragment>
   );
 };
