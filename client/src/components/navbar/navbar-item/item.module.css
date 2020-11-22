@@ -1,0 +1,10 @@
+.Item {
+    list-style:none;
+    padding:1rem;
+}
+
+.Link {
+    color: #FFF;
+    text-decoration: none;
+    font-size:1.6rem;
+}
