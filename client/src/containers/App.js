@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import Container from "react-bootstrap/Container";
-import Register from "./register/Register";
+import Register from "./Register/Register";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
