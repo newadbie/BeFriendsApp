@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import Navbar from "../../components/navbar/navbar";
-import Register from './../register/Register';
+import React from 'react'
+import { Container } from "react-bootstrap";
+import Navigation from "../navigation/Navigation";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-  const [getItemsState, setItemsState] = useState({
-    items: [{ title: "Homepage" }, { title: "Login" }]
-  });
-
   return (
     <React.Fragment>
-      <Navbar items={getItemsState.items} />
-      <Register />
+      <Navigation />
+      <Container fluid></Container>
     </React.Fragment>
   );
 };
