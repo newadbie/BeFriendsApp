@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const Schema = mongoose.Schema;
 
@@ -13,4 +14,11 @@ const userSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model('User', userSchema);
+const joiSchema = Joi.object().keys({
+  email: Joi.string().required().email().normalize(),
+  password: Joi.string().required(),
+  confirmPassword: Joi.any().valid(Joi.ref("password")).required(),
+});
+
+module.exports.userSchema = mongoose.model("User", userSchema);
+module.exports.userJoi = joiSchema;

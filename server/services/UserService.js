@@ -1,4 +1,4 @@
-const User = require("../models/user");
+const User = require("../models/user").userSchema;
 const bcrypt = require("bcrypt");
 
 class UserService {

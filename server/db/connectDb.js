@@ -4,7 +4,6 @@ const secrets = require("../secret");
 function connectMongo() {
   return new Promise((resolve, reject) => {
     if (process.env.NODE_ENV.toString().trim() === "test") {
-      console.log("test!");
       const Mockgoose = require("mockgoose").Mockgoose;
       const mockgoose = new Mockgoose(mongoose);
 

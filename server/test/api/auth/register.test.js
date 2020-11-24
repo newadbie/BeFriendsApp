@@ -4,12 +4,6 @@ const myDb = require("../../../db/connectDb");
 
 const app = require("../../../app");
 
-const isIncorrectParam = (response, incorrectParam) => {
-  const errors = response.body.errors;
-
-  return errors.filter((e) => e.param === incorrectParam.toString()).length > 0;
-};
-
 describe("POST /register", () => {
   before((done) => {
     myDb
@@ -53,8 +47,6 @@ describe("POST /register", () => {
         const statusCode = res.statusCode;
         expect(statusCode).equal(400);
 
-        const incorrectParam = isIncorrectParam(res, "confirmPassword");
-        expect(incorrectParam).equal(true);
         done();
       })
       .catch((err) => done(err));
