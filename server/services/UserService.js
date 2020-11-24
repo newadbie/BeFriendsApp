@@ -24,7 +24,7 @@ class UserService {
   static createNewUser(userMail, userPassword) {
     return this.getUserByEmail(userMail).then((user) => {
       if (user) {
-        throw new Error("User is already in use!");
+        throw new Error("Email is already in use!");
       }
       return bcrypt.hash(userPassword, 12).then((hashedPassword) => {
         return new User({

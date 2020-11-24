@@ -1,11 +1,9 @@
-const secrets = require("./secret"); 
-
 const express = require("express");
-const mongoose = require("mongoose");
+const connectDb = require('./db/connectDb').connectMongo;
 
 const bodyParser = require("body-parser");
 
-const authRoutes = require("./routes/auth/auth");
+const authApi = require("./api/auth");
 
 const app = express();
 
@@ -18,11 +16,14 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use(authRoutes);
+app.use(authApi);
 
-mongoose.connect(secrets.URI, {useNewUrlParser: true, useUnifiedTopology: true})
+connectDb()
 .then(() => 
 {
   app.listen(8080);
 })
 .catch(err => console.log(err))
+
+
+module.exports = app;
