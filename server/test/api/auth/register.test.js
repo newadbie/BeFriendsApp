@@ -3,22 +3,12 @@ const request = require("supertest");
 const myDb = require("../../../db/connectDb");
 
 const app = require("../../../app");
+myDb
+  .connectMongo()
+  .then(() => done())
+  .catch((err) => done(err));
 
 describe("POST /register", () => {
-  before((done) => {
-    myDb
-      .connectMongo()
-      .then(() => done())
-      .catch((err) => done(err));
-  });
-
-  after((done) => {
-    myDb
-      .closeMongo()
-      .then(() => done())
-      .catch((err) => done(err));
-  });
-
   it("Correct!, User has been created successfully!", (done) => {
     request(app)
       .post("/register")
@@ -70,5 +60,9 @@ describe("POST /register", () => {
         done(err);
       });
   });
-
 });
+
+myDb
+  .closeMongo()
+  .then(() => done())
+  .catch((err) => done(err));
