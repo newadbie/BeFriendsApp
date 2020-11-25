@@ -1,7 +1,10 @@
 const userRegisterJoi = require("../models/user").userRegisterJoi;
 const userLoginJoi = require("../models/user").userLoginJoi;
 const UserService = require("../services/UserService");
-const User = require("../models/user").userSchema;
+const jwt = require("jsonwebtoken");
+const user = require("../models/user");
+
+const secret = require("../secret");
 
 exports.postSignUp = async (req, res, next) => {
   userRegisterJoi
@@ -29,11 +32,18 @@ exports.postSignIn = async (req, res, next) => {
     .then((result) => {
       return UserService.isPasswordCorrect(req.body.password, req.body.email);
     })
-    .then((isPasswordCorrect) => {
-      if (isPasswordCorrect) {
+    .then((data) => {
+      if (data.isPasswordCorrect) {
+        console.log(data.user._id);
+        const jwtToken = jwt.sign({ id: data.user._id }, secret.jwtSecret, {
+          expiresIn: 3600,
+        });
         return res
           .status(200)
-          .json({ message: "Everything is correct! You are logged in!" });
+          .json({
+            message: "Everything is correct! You are logged in!",
+            accessToken: jwtToken,
+          });
       } else {
         return res
           .status(401)
@@ -43,5 +53,5 @@ exports.postSignIn = async (req, res, next) => {
     .catch((err) => {
       return res.status(422).json({ message: err.message });
     });
-  //return res.status(200).json({ message: "Logged successfully!" });
 };
+

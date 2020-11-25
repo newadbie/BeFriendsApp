@@ -16,8 +16,8 @@ class UserService {
 
       return bcrypt
         .compare(passwordToCompare, user.password)
-        .then((doMatch) => {
-          return Promise.resolve(doMatch);
+        .then((isPasswordCorrect) => {
+          return Promise.resolve({isPasswordCorrect: isPasswordCorrect, user: user});
         });
     });
   }
