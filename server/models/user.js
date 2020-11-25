@@ -14,7 +14,7 @@ const userSchema = new Schema({
   },
 });
 
-const joiSchema = Joi.object().keys({
+const joiRegisterSchema = Joi.object().keys({
   email: Joi.string().trim().required().email().normalize(),
   password: Joi.string().trim().required().trim(),
   confirmPassword: Joi.any()
@@ -32,5 +32,13 @@ const joiSchema = Joi.object().keys({
     }),
 });
 
-module.exports.userSchema = mongoose.model("User", userSchema);
-module.exports.userJoi = joiSchema;
+const joiLoginSchema = Joi.object().keys({
+  email: Joi.string().trim().required().email().normalize(),
+  password: Joi.string().trim().required().trim()
+})
+
+module.exports = {
+  userSchema: mongoose.model("User", userSchema),
+  userRegisterJoi: joiRegisterSchema,
+  userLoginJoi: joiLoginSchema
+}

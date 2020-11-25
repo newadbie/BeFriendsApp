@@ -8,16 +8,17 @@ class UserService {
     });
   }
 
-  static doesPasswordCompare(passwordToCompare, userEmail) {
-    this.getUserByEmail(userEmail).then((user) => {
+  static isPasswordCorrect(passwordToCompare, userEmail) {
+    return this.getUserByEmail(userEmail).then((user) => {
       if (!user) {
-        throw Promise.reject("This email is not assigned to any account!")
+        return Promise.reject("Email or password is incorrect");
       }
 
-      return bcrypt.compare(passwordToCompare, user.password)
-      .then(doMatch => {
-        return Promise.resolve(doMatch);
-      })
+      return bcrypt
+        .compare(passwordToCompare, user.password)
+        .then((doMatch) => {
+          return Promise.resolve(doMatch);
+        });
     });
   }
 
