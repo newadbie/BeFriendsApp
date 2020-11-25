@@ -51,4 +51,23 @@ describe("POST /register", () => {
       })
       .catch((err) => done(err));
   });
+
+  it("Incorrect, email is already in use!", (done) => {
+    request(app)
+      .post("/register")
+      .send({
+        email: "UserTestNotExist@wp.pl",
+        password: "VeryCorrectPassword!",
+        confirmPassword: "VeryCorrectPassword!",
+      })
+      .then((result) => {
+        const statusCode = result.statusCode;
+        expect(statusCode).equal(422);
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+        done(err);
+      });
+  });
 });

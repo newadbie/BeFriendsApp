@@ -15,8 +15,8 @@ const userSchema = new Schema({
 });
 
 const joiSchema = Joi.object().keys({
-  email: Joi.string().required().email().normalize(),
-  password: Joi.string().required(),
+  email: Joi.string().trim().required().email().normalize(),
+  password: Joi.string().trim().required().trim(),
   confirmPassword: Joi.any().valid(Joi.ref("password")).required(),
 });
 

@@ -22,6 +22,7 @@ class UserService {
   }
 
   static createNewUser(userMail, userPassword) {
+    userMail = userMail.toString().trim();
     return this.getUserByEmail(userMail).then((user) => {
       if (user) {
         throw new Error("Email is already in use!");
