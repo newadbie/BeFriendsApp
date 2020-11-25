@@ -34,7 +34,6 @@ exports.postSignIn = async (req, res, next) => {
     })
     .then((data) => {
       if (data.isPasswordCorrect) {
-        console.log(data.user._id);
         const jwtToken = jwt.sign({ id: data.user._id }, secret.jwtSecret, {
           expiresIn: 3600,
         });

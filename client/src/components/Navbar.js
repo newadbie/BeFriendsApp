@@ -14,12 +14,20 @@ const Navigation = (props) => {
           <Nav.Link href="#pricing">Pricing</Nav.Link>
         </Nav>
         <Nav>
-          <LinkContainer to="/register">
-            <Nav.Link href="/register">Register</Nav.Link>
-          </LinkContainer>
-          <LinkContainer to="/login">
-            <Nav.Link href="/login">Login</Nav.Link>
-          </LinkContainer>
+          {props.isUserLogged ? (
+            <React.Fragment>
+              <Nav.Link onClick={props.signOut}>Logout</Nav.Link>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <LinkContainer to="/register">
+                <Nav.Link href="/register">Register</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to="/login">
+                <Nav.Link href="/login">Login</Nav.Link>
+              </LinkContainer>
+            </React.Fragment>
+          )}
         </Nav>
       </Navbar>
     </React.Fragment>

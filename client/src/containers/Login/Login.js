@@ -3,10 +3,22 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import axios from "axios";
+import { Redirect } from "react-router";
 
-const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+const Login = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const LOGIN_URI = "http://localhost:8080/login";
+
+  const signIn = () => {
+    axios
+      .post(LOGIN_URI, { email: email, password: password })
+      .then((res) => {
+        props.signIn(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <Container className="w-50 mt-auto mb-auto">
@@ -17,7 +29,7 @@ const Login = () => {
             type="email"
             placeholder="Enter email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </Form.Group>
@@ -27,15 +39,16 @@ const Login = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
         <Button
           variant="primary"
           type="submit"
           className="ml-auto mr-auto d-block"
+          onClick={signIn}
         >
-            Login
+          Login
         </Button>
       </Form>
     </Container>

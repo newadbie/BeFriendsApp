@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
+
 import axios from "axios";
 
 const Register = (props) => {
@@ -66,7 +69,10 @@ const Register = (props) => {
         addErrorsHandler([errorMessage]);
       });
   };
-  return (
+
+  return props.isUserLogged ? (
+    <Redirect to="/" />
+  ) : (
     <Container className="w-50">
       {isSuccessfull ? (
         <Alert variant="success">User has been created successfully!</Alert>
