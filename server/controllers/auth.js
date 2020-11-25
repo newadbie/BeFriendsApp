@@ -15,9 +15,8 @@ exports.postSignIn = async (req, res, next) => {
             .json({ message: "User has been created sucessfully!" });
         })
         .catch((err) => {
-          console.log("HERE");
-          return res.status(422).json({ message: "User is not created" });
+          return res.status(422).json({ message: err.message});
         });
     })
-    .catch((err) => res.status(400).json({ message: "Not valid inputs" }));
+    .catch((err) => res.status(400).json({ message: err.message }));
 };

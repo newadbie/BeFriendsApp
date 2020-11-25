@@ -3,11 +3,15 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
 
 const Register = (props) => {
+  const REGISTER_URL = "http://localhost:8080/register";
+
+  const [isSuccessfull, setIsSucessfull] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfimPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [errors, setErrors] = useState([]);
   let errorAlerts = null;
@@ -36,11 +40,37 @@ const Register = (props) => {
     }
     if (errors.length > 0) {
       addErrorsHandler(errors);
+      return;
     }
-  };
 
+    const postData = {
+      email: email,
+      password: password,
+      confirmPassword: confirmPassword,
+    };
+    axios
+      .post(REGISTER_URL, postData)
+      .then((res) => {
+        setErrors([]);
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+
+        setIsSucessfull(true);
+        setTimeout(() => {
+          setIsSucessfull(false);
+        }, 3000);
+      })
+      .catch((err) => {
+        const errorMessage = err.response.data.message;
+        addErrorsHandler([errorMessage]);
+      });
+  };
   return (
     <Container className="w-50">
+      {isSuccessfull ? (
+        <Alert variant="success">User has been created successfully!</Alert>
+      ) : null}
       {errorAlerts}
       <Form onSubmit={(e) => e.preventDefault()}>
         <Form.Group controlId="email">
@@ -71,7 +101,7 @@ const Register = (props) => {
             type="password"
             placeholder="Confirm your password!"
             value={confirmPassword}
-            onChange={(e) => setConfimPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </Form.Group>
