@@ -5,15 +5,22 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useSelector } from "react-redux";
 
 const Navigation = (props) => {
-  const isUserLogged = useSelector(state => state.isLogged);
-  
+  const isUserLogged = useSelector((state) => state.isLogged);
+
   let loginNav = null;
   switch (isUserLogged) {
-    case null: 
-    loginNav = null;
-    break;
+    case null:
+      loginNav = null;
+      break;
     case true:
-      loginNav = <Nav.Link onClick={props.signOut}>Logout</Nav.Link>
+      loginNav = (
+        <React.Fragment>
+          <Nav.Link onClick={props.signOut}>Logout</Nav.Link>
+          <LinkContainer to="/user/lends">
+            <Nav.Link to="/user/lends">Your lends!</Nav.Link>
+          </LinkContainer>
+        </React.Fragment>
+      );
       break;
     case false:
       loginNav = (
@@ -25,7 +32,7 @@ const Navigation = (props) => {
             <Nav.Link href="/login">Login</Nav.Link>
           </LinkContainer>
         </React.Fragment>
-      )
+      );
   }
   return (
     <React.Fragment>
@@ -38,9 +45,7 @@ const Navigation = (props) => {
             <Nav.Link>Pricing</Nav.Link>
           </LinkContainer>
         </Nav>
-        <Nav>
-          {loginNav}
-        </Nav>
+        <Nav>{loginNav}</Nav>
       </Navbar>
     </React.Fragment>
   );

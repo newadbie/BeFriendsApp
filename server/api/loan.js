@@ -5,6 +5,8 @@ const isLogged = require("../middlewares/isLogged");
 
 const router = express.Router();
 
-router.post("/user/giveLoan", isLogged, loanController.postLoan);
+router.put("/user/giveLoan", isLogged, loanController.postLoan);
+
+router.get("/user/getLoans", isLogged, loanController.getLoans);
 
 module.exports = router;
