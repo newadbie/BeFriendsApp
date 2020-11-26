@@ -20,10 +20,11 @@ const loanSchema = new Schema({
 });
 
 const joiGiveLoan = Joi.object().keys({
-    borrower: Joi.object().keys({
-        name: Joi.string().trim().required(),
-        phoneNumber: Joi.string().min(8).max(9).required()
-    }),
+    // borrower: Joi.object().keys({
+    //     name: Joi.string().trim().required(),
+    //     phoneNumber: Joi.string().min(8).max(9).required()
+    // }),
+    borrower: Joi.any().required(),
     lender: Joi.string().required(),
     loanValue: Joi.number().min(1).required()
 })
