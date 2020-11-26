@@ -6,6 +6,10 @@ const jwt = require("jsonwebtoken");
 const secret = require("../secret");
 
 exports.postSignUp = async (req, res, next) => {
+  if (req.user !== null) {
+    return res.status(401).json({message: "Logged users cannot register!"});
+  }
+
   userRegisterJoi
     .validateAsync(req.body)
     .then((validateResult) => {
@@ -26,6 +30,10 @@ exports.postSignUp = async (req, res, next) => {
 };
 
 exports.postSignIn = async (req, res, next) => {
+  if (req.user) {
+    return res.status(401).json({message: "Logged users cannot log in again!"});
+  }
+  
   userLoginJoi
     .validateAsync(req.body)
     .then((result) => {
@@ -40,7 +48,7 @@ exports.postSignIn = async (req, res, next) => {
           { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
           secret.jwtSecret,
           {
-            expiresIn: 60 * 60,
+            expiresIn: 60 * 60 * 60,
           }
         );
         return res
@@ -63,6 +71,11 @@ exports.postSignIn = async (req, res, next) => {
     });
 };
 
+exports.postGetLoggedUser = async (req, res, next) => {
+  console.log("EEE")
+  return res.status(200).json({ userEmail: req.user.email });
+};
+
 exports.postSignOut = async (req, res, next) => {
-  return res.clearCookie("token").status(200).json({message: "OK"});
-}
+  return res.clearCookie("token").status(200).json({ message: "OK" });
+};

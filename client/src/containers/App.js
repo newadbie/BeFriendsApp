@@ -1,24 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Container from "react-bootstrap/Container";
 import Register from "./Register/Register";
 import Login from "./Login/Login";
 import axios from "axios";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { login, logout } from "../actions/isLogged";
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Homepage from "./Homepage";
 
-const App = () => {
-  const [isUserLogged, setUserLoggedState] = useState(null);
-  const [user, setUser] = useState(null);
+const App = (props) => {
+  const SERVER_URI = "http://localhost:8080";
+  const isLogged = useSelector((state) => state.isLogged);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios
+      .post(
+        "http://localhost:8080/getLoggedUser",
+        {},
+        { withCredentials: true }
+      )
+      .then((res) => {
+        dispatch(login());
+      })
+      .catch(() => dispatch(logout()));
+  }, [isLogged]);
 
   const signOutHandler = () => {
     axios
       .post("http://localhost:8080/logout", {}, { withCredentials: true })
       .then((res) => {
-        console.log("Success");
+        dispatch(logout());
       })
       .catch((err) => console.log("Error"));
   };
@@ -35,7 +57,8 @@ const App = () => {
       .then((res) => {
         // console.log(res);
         // console.log(res.data);
-        props.signIn(res.data);
+        dispatch(login());
+        return <Redirect to="/" />;
       })
       .catch((err) => console.log(err));
   };
@@ -47,7 +70,7 @@ const App = () => {
         <Container className="mt-5" fluid>
           <Switch>
             <Route path="/register">
-              <Register isUserLogged={isUserLogged} />
+              <Register />
             </Route>
             <Route path="/login">
               <Login signIn={signInHandler} isUserLogged={false} />
