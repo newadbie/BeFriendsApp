@@ -3,13 +3,9 @@ import Navbar from "../components/Navbar";
 import Container from "react-bootstrap/Container";
 import Register from "./Register/Register";
 import Login from "./Login/Login";
+import axios from "axios";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Homepage from "./Homepage";
@@ -18,53 +14,43 @@ const App = () => {
   const [isUserLogged, setUserLoggedState] = useState(null);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const currentUser = localStorage.getItem("user");
-    if (currentUser !== null) {
-      setUserLoggedState(true);
-      setUser(currentUser);
-    } else {
-      setUser(null);
-      setUserLoggedState(false);
-    }
-  }, [user]);
-
-  const signInHandler = (jsonUserData) => {
-    console.log(jsonUserData);
-    if (jsonUserData) {
-      const userData = JSON.stringify(jsonUserData);
-      setUser(userData);
-      setUserLoggedState(true);
-      localStorage.setItem("user", userData);
-    }
-  };
   const signOutHandler = () => {
-    if (localStorage.getItem("user") !== null) {
-      localStorage.removeItem("user");
-      setUser({});
-      setUserLoggedState(false);
-    }
+    axios
+      .post("http://localhost:8080/logout", {}, { withCredentials: true })
+      .then((res) => {
+        console.log("Success");
+      })
+      .catch((err) => console.log("Error"));
+  };
+
+  const signInHandler = (user) => {
+    const LOGIN_URI = "http://localhost:8080/login";
+
+    axios
+      .post(
+        LOGIN_URI,
+        { email: user.email, password: user.password },
+        { withCredentials: true }
+      )
+      .then((res) => {
+        // console.log(res);
+        // console.log(res.data);
+        props.signIn(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <React.Fragment>
       <Router>
-        <Navbar isUserLogged={isUserLogged} signOut={signOutHandler} />
+        <Navbar signOut={signOutHandler} />
         <Container className="mt-5" fluid>
           <Switch>
             <Route path="/register">
-              {localStorage.getItem("user") !== null || user !== null ? (
-                <Redirect to="/" />
-              ) : (
-                <Register isUserLogged={isUserLogged} />
-              )}
+              <Register isUserLogged={isUserLogged} />
             </Route>
             <Route path="/login">
-              {localStorage.getItem("user") !== null || user !== null ? (
-                <Redirect to="/" />
-              ) : (
-                <Login signIn={signInHandler} isUserLogged={isUserLogged} />
-              )}
+              <Login signIn={signInHandler} isUserLogged={false} />
             </Route>
             <Route path="/">
               <Homepage />

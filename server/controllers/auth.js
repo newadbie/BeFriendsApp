@@ -2,7 +2,6 @@ const userRegisterJoi = require("../models/user").userRegisterJoi;
 const userLoginJoi = require("../models/user").userLoginJoi;
 const UserService = require("../services/UserService");
 const jwt = require("jsonwebtoken");
-const user = require("../models/user");
 
 const secret = require("../secret");
 
@@ -32,11 +31,18 @@ exports.postSignIn = async (req, res, next) => {
     .then((result) => {
       return UserService.isPasswordCorrect(req.body.password, req.body.email);
     })
-    .then((data) => {
-      if (data.isPasswordCorrect) {
-        const jwtToken = jwt.sign({ id: data.user._id }, secret.jwtSecret, {
-          expiresIn: 30,
-        });
+    .then((user) => {
+      if (user) {
+        if (!user.logoutFromAllDevicesKey) {
+          return res.status(503).json({ message: "Error" });
+        }
+        const jwtToken = jwt.sign(
+          { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
+          secret.jwtSecret,
+          {
+            expiresIn: 60 * 60,
+          }
+        );
         return res
           .status(200)
           .cookie("token", jwtToken, {
@@ -56,3 +62,7 @@ exports.postSignIn = async (req, res, next) => {
       return res.status(422).json({ message: err.message });
     });
 };
+
+exports.postSignOut = async (req, res, next) => {
+  return res.clearCookie("token").status(200).json({message: "OK"});
+}

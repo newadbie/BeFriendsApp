@@ -12,6 +12,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  logoutFromAllDevicesKey: {
+    type: String,
+    required: true
+  }
 });
 
 const joiRegisterSchema = Joi.object().keys({

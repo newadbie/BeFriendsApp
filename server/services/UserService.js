@@ -1,5 +1,6 @@
 const User = require("../models/user").userSchema;
 const bcrypt = require("bcrypt");
+const crypto = require('crypto');
 
 class UserService {
   static getUserByEmail(userEmail) {
@@ -17,13 +18,15 @@ class UserService {
       return bcrypt
         .compare(passwordToCompare, user.password)
         .then((isPasswordCorrect) => {
-          return Promise.resolve({isPasswordCorrect: isPasswordCorrect, user: user});
+          return Promise.resolve(isPasswordCorrect ? user : null);
         });
     });
   }
 
   static createNewUser(userMail, userPassword) {
     userMail = userMail.toString().trim();
+    userPassword = userPassword.toString().trim();
+    const logoutKey = crypto.randomBytes(128).toString('base64');
     return this.getUserByEmail(userMail).then((user) => {
       if (user) {
         throw new Error("Email is already in use!");
@@ -32,6 +35,7 @@ class UserService {
         return new User({
           email: userMail,
           password: hashedPassword,
+          logoutFromAllDevicesKey: logoutKey
         }).save();
       });
     });
