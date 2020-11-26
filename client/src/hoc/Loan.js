@@ -19,7 +19,7 @@ const LoanUtil = () => {
       <React.Fragment>
       <Switch>
         <Route path="/user/loans/give">
-          <p>DAJE</p>
+          <GiveLoan />
         </Route>
         <Route path="/user/loans">
           <Loan />
