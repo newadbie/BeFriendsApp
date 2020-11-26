@@ -3,8 +3,9 @@ import Navbar from "../components/Navbar";
 import Container from "react-bootstrap/Container";
 import Register from "./Register/Register";
 import Login from "./Login/Login";
-import Loans from './User/Loans';
+import LoanAux from '../hoc/Loan';
 import axios from "axios";
+
 
 import { useSelector, useDispatch } from "react-redux";
 import { login, logout } from "../actions/isLogged";
@@ -53,8 +54,6 @@ const App = (props) => {
         { withCredentials: true }
       )
       .then((res) => {
-        // console.log(res);
-        // console.log(res.data);
         dispatch(login());
         return <Redirect to="/" />;
       })
@@ -73,8 +72,8 @@ const App = (props) => {
             <Route path="/login">
               <Login signIn={signInHandler} isUserLogged={false} />
             </Route>
-            <Route path="/user/loans">
-              <Loans />
+            <Route path="/user/">
+              <LoanAux />
             </Route>
             <Route path="/">
               <Homepage />

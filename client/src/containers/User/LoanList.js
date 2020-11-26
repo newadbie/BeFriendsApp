@@ -1,6 +1,6 @@
 import LoanItem from "../../components/Loan-item";
 
-const Loan = (props) => {
+const LoanList = (props) => {
   const distinctPersons = props.loans
     .map((loan) => {
       return {
@@ -21,11 +21,17 @@ const Loan = (props) => {
     props.loans
       .filter((loan) => loan.borrower.phoneNumber === person.phoneNumber)
       .forEach((loan) => {
-        borrowedMoney += +loan.lendValue;
+        borrowedMoney += +loan.loanValue;
       });
-      return (<LoanItem key={person.phoneNumber} name={person.name} ows={+borrowedMoney}/>)
+    return (
+      <LoanItem
+        key={person.phoneNumber}
+        name={person.name}
+        ows={+borrowedMoney}
+      />
+    );
   });
-  return (<div>{loanList}</div>);
+  return <div>{loanList}</div>;
 };
 
-export default Loan;
+export default LoanList;

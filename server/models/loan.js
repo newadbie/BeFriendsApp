@@ -19,7 +19,7 @@ const loanSchema = new Schema({
         required: true,
         ref: 'User'
     },
-    lendValue: {
+    loanValue: {
         type: Number,
         required: true,
     }
@@ -31,7 +31,7 @@ const joiGiveLoan = Joi.object().keys({
         phoneNumber: Joi.string().min(8).max(9).required()
     }),
     lender: Joi.string().required(),
-    lendValue: Joi.number().min(1).required()
+    loanValue: Joi.number().min(1).required()
 })
 
 exports.loanSchema = mongoose.model('Loan', loanSchema);

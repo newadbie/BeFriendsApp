@@ -8,7 +8,7 @@ exports.postLoan = (req, res, next) => {
       phoneNumber: req.body.borrower.phoneNumber,
     },
     lender: req.user._id.toString(),
-    lendValue: 10,
+    loanValue: req.body.loanValue,
   };
   joiLoan
     .validateAsync(loanData)
@@ -19,6 +19,7 @@ exports.postLoan = (req, res, next) => {
       return res.status(200).json({ message: "ok" });
     })
     .catch((err) => {
+      console.log(err)
       return res.status(401).json({ message: "incorrect!" });
     });
 };
@@ -33,7 +34,7 @@ exports.getLoans = (req, res, next) => {
             name: loan.borrower.name,
             phoneNumber: loan.borrower.phoneNumber,
           },
-          lendValue: loan.lendValue,
+          loanValue: loan.loanValue,
         };
       });
       return res.status(200).json(responseData);
