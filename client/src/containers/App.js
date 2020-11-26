@@ -39,10 +39,7 @@ const App = (props) => {
   const signOutHandler = () => {
     axios
       .post("http://localhost:8080/logout", {}, { withCredentials: true })
-      .then((res) => {
-        dispatch(logout());
-      })
-      .catch((err) => console.log("Error"));
+      .finally(() => dispatch(logout()));
   };
 
   const signInHandler = (user) => {

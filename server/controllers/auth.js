@@ -48,7 +48,7 @@ exports.postSignIn = async (req, res, next) => {
           { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
           secret.jwtSecret,
           {
-            expiresIn: 60 * 60 * 60,
+            expiresIn: 60 * 60,
           }
         );
         return res
