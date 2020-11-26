@@ -4,17 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "test": "set NODE_ENV=test && mocha --recursive --exit --timeout 120000",
+    "start": "set NODE_ENV=dev && nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "mockgoose": "^8.0.4",
+    "mongodb-memory-server": "^6.9.2",
+    "nodemon": "^2.0.6",
+    "supertest": "^6.0.1"
   },
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-validator": "^6.6.1",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.10.15"
   }
 }

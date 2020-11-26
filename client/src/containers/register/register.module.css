@@ -1,0 +1,14 @@
+.RegisterForm {
+    display:flex;
+    justify-content: center;
+    margin-top:2rem;
+    border: 1px solid rgba(0,0,0,.3);
+    padding:20px;
+}
+
+.RegisterButton__div {
+    display:flex;
+    justify-content: center;
+    align-items:center;
+    margin-top:10px;
+}
