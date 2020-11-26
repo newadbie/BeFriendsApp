@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const secret = require("../secret");
 
 exports.postSignUp = async (req, res, next) => {
-  if (req.user !== null) {
+  if (req.user) {
     return res.status(401).json({message: "Logged users cannot register!"});
   }
 
