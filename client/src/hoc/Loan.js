@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import GiveLoan from "../containers/User/GiveLoan";
 import Loan from '../containers/User/Loans';
 import { useSelector } from "react-redux";
@@ -17,12 +17,14 @@ const LoanUtil = () => {
       break;
     case true:content = (
       <React.Fragment>
+      <Switch>
         <Route path="/user/loans/give">
           <p>DAJE</p>
         </Route>
         <Route path="/user/loans">
           <Loan />
         </Route>
+        </Switch>
       </React.Fragment> );
       break;
   }
