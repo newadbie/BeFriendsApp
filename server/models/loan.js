@@ -5,14 +5,8 @@ const Schema = mongoose.Schema;
 
 const loanSchema = new Schema({
     borrower: {
-        name: {
-            type: String,
-            required: true
-        },
-        phoneNumber: {
-            type: Number,
-            required: true,
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'Borrower'
     },
     lender: {
         type: Schema.Types.ObjectId,
