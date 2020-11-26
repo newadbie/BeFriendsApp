@@ -16,8 +16,8 @@ const Navigation = (props) => {
       loginNav = (
         <React.Fragment>
           <Nav.Link onClick={props.signOut}>Logout</Nav.Link>
-          <LinkContainer to="/user/lends">
-            <Nav.Link to="/user/lends">Your lends!</Nav.Link>
+          <LinkContainer to="/user/loans">
+            <Nav.Link to="/user/loans">Your loans!</Nav.Link>
           </LinkContainer>
         </React.Fragment>
       );

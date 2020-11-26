@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Container from "react-bootstrap/Container";
 import Register from "./Register/Register";
 import Login from "./Login/Login";
-import Lends from './User/Lends';
+import Loans from './User/Loans';
 import axios from "axios";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -73,8 +73,8 @@ const App = (props) => {
             <Route path="/login">
               <Login signIn={signInHandler} isUserLogged={false} />
             </Route>
-            <Route path="/user/lends">
-              <Lends />
+            <Route path="/user/loans">
+              <Loans />
             </Route>
             <Route path="/">
               <Homepage />

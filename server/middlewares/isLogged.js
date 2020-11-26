@@ -30,7 +30,7 @@ const isLogged = (req, res, next) => {
         }
 
         req.user = user;
-        return next();
+        next();
       })
       .catch((err) => {
         return res.status(401).json({ message: "Something went wrong!" });

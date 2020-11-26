@@ -72,7 +72,6 @@ exports.postSignIn = async (req, res, next) => {
 };
 
 exports.postGetLoggedUser = async (req, res, next) => {
-  console.log("EEE")
   return res.status(200).json({ userEmail: req.user.email });
 };
 
