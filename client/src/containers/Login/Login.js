@@ -13,8 +13,14 @@ const Login = (props) => {
 
   const signIn = () => {
     axios
-      .post(LOGIN_URI, { email: email, password: password })
+      .post(
+        LOGIN_URI,
+        { email: email, password: password },
+        { withCredentials: true }
+      )
       .then((res) => {
+        // console.log(res);
+        // console.log(res.data);
         props.signIn(res.data);
       })
       .catch((err) => console.log(err));

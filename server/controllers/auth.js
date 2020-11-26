@@ -35,13 +35,16 @@ exports.postSignIn = async (req, res, next) => {
     .then((data) => {
       if (data.isPasswordCorrect) {
         const jwtToken = jwt.sign({ id: data.user._id }, secret.jwtSecret, {
-          expiresIn: 3600,
+          expiresIn: 30,
         });
         return res
           .status(200)
+          .cookie("token", jwtToken, {
+            maxAge: 30000000,
+            httpOnly: true,
+          })
           .json({
             message: "Everything is correct! You are logged in!",
-            accessToken: jwtToken,
           });
       } else {
         return res
@@ -53,4 +56,3 @@ exports.postSignIn = async (req, res, next) => {
       return res.status(422).json({ message: err.message });
     });
 };
-
