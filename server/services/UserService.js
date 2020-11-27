@@ -26,7 +26,6 @@ class UserService {
   static async createNewUser(userMail, userPassword) {
     userMail = userMail.toString().trim();
     userPassword = userPassword.toString().trim();
-
     const isEmailRegistered = await UserService.getUserByEmail(userMail);
     if (isEmailRegistered) {
       throw new Error("Email is already in use!");

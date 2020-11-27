@@ -14,16 +14,19 @@ const userSchema = new Schema({
   },
   logoutFromAllDevicesKey: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const joiRegisterSchema = Joi.object().keys({
-  email: Joi.string().trim().required().email().normalize(),
-  password: Joi.string().trim().required().trim(),
-  confirmPassword: Joi.any()
-    .valid(Joi.ref("password"))
-    .required()
+  email: Joi.string().email().normalize().trim().required(),
+  password: Joi.string().normalize().trim().required()
+  .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#<>()\$%\^&\*])(?=.{8,}).*/)
+  .message("Password is too weak!"),
+  confirmPassword: Joi.string()
+  .trim()
+  .valid(Joi.ref("password"))
+  .required()
     .error((errors) => {
       errors.forEach((err) => {
         switch (err.code) {
@@ -37,12 +40,12 @@ const joiRegisterSchema = Joi.object().keys({
 });
 
 const joiLoginSchema = Joi.object().keys({
-  email: Joi.string().trim().required().email().normalize(),
-  password: Joi.string().trim().required().trim()
-})
+  email: Joi.string().required().email().normalize().trim(),
+  password: Joi.string().alphanum().normalize().required().trim(),
+});
 
 module.exports = {
   userSchema: mongoose.model("User", userSchema),
   userRegisterJoi: joiRegisterSchema,
-  userLoginJoi: joiLoginSchema
-}
+  userLoginJoi: joiLoginSchema,
+};

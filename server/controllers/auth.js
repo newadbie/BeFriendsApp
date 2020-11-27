@@ -18,7 +18,7 @@ exports.postSignUp = async (req, res, next) => {
 
   const userMail = req.body.email;
   const userPassword = req.body.password;
-
+  
   await UserService.createNewUser(userMail, userPassword)
     .then(() => {
       return res
