@@ -9,7 +9,7 @@ class UserService {
     });
   }
 
-  static async isPasswordCorrect(passwordToCompare, userEmail) {
+  static async getUserIfPasswordIsCorrect(passwordToCompare, userEmail) {
     const registeredUser = await UserService.getUserByEmail(userEmail);
 
     if (!registeredUser) {

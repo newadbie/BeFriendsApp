@@ -41,7 +41,7 @@ exports.postSignIn = async (req, res, next) => {
     return res.status(422).json({ message: error.message });
   }
 
-  const user = await isPasswordCorrect(req.body.password, req.body.email);
+  const user = await getUserIfPasswordIsCorrect(req.body.password, req.body.email);
   if (!user) {
     return res.status(401).json({ message: "Email or password is incorrect!" });
   }
