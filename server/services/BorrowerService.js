@@ -1,16 +1,14 @@
 const Borrower = require("../models/borrower").borrowerSchema;
 
-exports.isBorrowerRegistered = async (phoneNumber) => {
-  return Borrower.findOne({ phoneNumber: phoneNumber }).then((borrower) => {
-    if (borrower) {
-      return Promise.resolve(borrower);
-    } else {
-      return Promise.resolve(null);
-    }
-  });
+exports.getBorrowerData = async (phoneNumber, borrowerName) => {
+  const borrower = await Borrower.findOne({ phoneNumber: phoneNumber });
+  if (!borrower) {
+    return await  this.registerNewBorrower(phoneNumber, borrowerName);
+  }
+  return borrower;
 };
 
-exports.registeredNewBorrower = (phoneNumber, borrowerName) => {
+exports.registerNewBorrower = (phoneNumber, borrowerName) => {
   return new Borrower({
     name: borrowerName,
     phoneNumber: phoneNumber,

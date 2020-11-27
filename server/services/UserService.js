@@ -1,44 +1,44 @@
 const User = require("../models/user").userSchema;
 const bcrypt = require("bcrypt");
-const crypto = require('crypto');
+const crypto = require("crypto");
 
 class UserService {
-  static getUserByEmail(userEmail) {
+  static async getUserByEmail(userEmail) {
     return User.findOne({ email: userEmail }).then((user) => {
-      return user;
+      return Promise.resolve(user ? user : null);
     });
   }
 
-  static isPasswordCorrect(passwordToCompare, userEmail) {
-    return this.getUserByEmail(userEmail).then((user) => {
-      if (!user) {
-        return Promise.reject("Email or password is incorrect");
-      }
+  static async isPasswordCorrect(passwordToCompare, userEmail) {
+    const registeredUser = await UserService.getUserByEmail(userEmail);
 
-      return bcrypt
-        .compare(passwordToCompare, user.password)
-        .then((isPasswordCorrect) => {
-          return Promise.resolve(isPasswordCorrect ? user : null);
-        });
-    });
+    if (!registeredUser) {
+      throw new Error("Email is nor registered");
+    }
+
+    return bcrypt
+      .compare(passwordToCompare, registeredUser.password)
+      .then((isPasswordCorrect) => {
+        return Promise.resolve(isPasswordCorrect ? registeredUser : null);
+      });
   }
 
-  static createNewUser(userMail, userPassword) {
+  static async createNewUser(userMail, userPassword) {
     userMail = userMail.toString().trim();
     userPassword = userPassword.toString().trim();
-    const logoutKey = crypto.randomBytes(128).toString('base64');
-    return this.getUserByEmail(userMail).then((user) => {
-      if (user) {
-        throw new Error("Email is already in use!");
-      }
-      return bcrypt.hash(userPassword, 12).then((hashedPassword) => {
-        return new User({
-          email: userMail,
-          password: hashedPassword,
-          logoutFromAllDevicesKey: logoutKey
-        }).save();
-      });
-    });
+
+    const isEmailRegistered = await UserService.getUserByEmail(userMail);
+    if (isEmailRegistered) {
+      throw new Error("Email is already in use!");
+    }
+
+    const logoutKey = crypto.randomBytes(128).toString("base64");
+    const hashedPassword = await bcrypt.hash(userPassword, 12);
+    return new User({
+      email: userMail,
+      password: hashedPassword,
+      logoutFromAllDevicesKey: logoutKey,
+    }).save();
   }
 }
 

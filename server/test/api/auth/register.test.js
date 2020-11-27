@@ -3,12 +3,15 @@ const request = require("supertest");
 const myDb = require("../../../db/connectDb");
 
 const app = require("../../../app");
-myDb
-  .connectMongo()
-  .then(() => done())
-  .catch((err) => done(err));
 
 describe("POST /register", () => {
+  before(() => {
+    myDb
+      .connectMongo()
+      .then(() => done())
+      .catch((err) => done(err));
+  });
+
   it("Correct!, User has been created successfully!", (done) => {
     request(app)
       .post("/register")
@@ -35,7 +38,7 @@ describe("POST /register", () => {
       })
       .then((res) => {
         const statusCode = res.statusCode;
-        expect(statusCode).equal(400);
+        expect(statusCode).equal(422);
 
         done();
       })
@@ -56,13 +59,15 @@ describe("POST /register", () => {
         done();
       })
       .catch((err) => {
-        console.log(err);
         done(err);
       });
   });
+  after(() => {
+    myDb
+    .closeMongo()
+    .then(() => done())
+    .catch((err) => done(err));
+  })
 });
 
-myDb
-  .closeMongo()
-  .then(() => done())
-  .catch((err) => done(err));
+
