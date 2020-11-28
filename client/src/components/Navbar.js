@@ -10,7 +10,7 @@ const Navigation = (props) => {
   let loginNav = null;
   switch (isUserLogged) {
     case null:
-      loginNav = null;
+      loginNav = <h1>Loading...</h1>;
       break;
     case true:
       loginNav = (

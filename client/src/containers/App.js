@@ -70,7 +70,7 @@ const App = (props) => {
               <Register />
             </Route>
             <Route path="/login">
-              <Login signIn={signInHandler} isUserLogged={false} />
+              <Login signIn={signInHandler} />
             </Route>
             <Route path="/user/">
               <LoanAux />

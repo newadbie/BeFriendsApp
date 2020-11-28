@@ -41,7 +41,7 @@ const joiRegisterSchema = Joi.object().keys({
 
 const joiLoginSchema = Joi.object().keys({
   email: Joi.string().required().email().normalize().trim(),
-  password: Joi.string().alphanum().normalize().required().trim(),
+  password: Joi.string().normalize().required().trim(),
 });
 
 module.exports = {

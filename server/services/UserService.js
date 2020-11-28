@@ -11,9 +11,8 @@ class UserService {
 
   static async getUserIfPasswordIsCorrect(passwordToCompare, userEmail) {
     const registeredUser = await UserService.getUserByEmail(userEmail);
-
     if (!registeredUser) {
-      throw new Error("Email is nor registered");
+      throw new Error("Email is not registered");
     }
 
     return bcrypt

@@ -5,7 +5,8 @@ const User = require("../models/user").userSchema;
 const isLogged = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(401).json({ message: "Not okey" });
+    req.user = null;
+    return next();
   }
 
   jwt.verify(token, secret.jwtSecret, (err, decoded) => {

@@ -4,7 +4,7 @@ const UserService = require("../services/UserService");
 const jwt = require("jsonwebtoken");
 
 const secret = require("../secret");
-const { isPasswordCorrect } = require("../services/UserService");
+const { getUserIfPasswordIsCorrect } = require("../services/UserService");
 
 exports.postSignUp = async (req, res, next) => {
   if (req.user) {
@@ -40,28 +40,29 @@ exports.postSignIn = async (req, res, next) => {
   if (error) {
     return res.status(422).json({ message: error.message });
   }
-
-  const user = await getUserIfPasswordIsCorrect(req.body.password, req.body.email);
-  if (!user) {
-    return res.status(401).json({ message: "Email or password is incorrect!" });
+  try {
+    const user = await getUserIfPasswordIsCorrect(req.body.password, req.body.email);
+    const jwtToken = jwt.sign(
+      { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
+      secret.jwtSecret,
+      {
+        expiresIn: 60 * 60,
+      }
+    );
+  
+    return res
+      .status(200)
+      .cookie("token", jwtToken, {
+        maxAge: 30000000,
+        httpOnly: true,
+      })
+      .json({
+        message: "Everything is correct! You are logged in!",
+      });
+  } catch(err) {
+    return res.status(401).json({ message: err.message });
   }
-  const jwtToken = jwt.sign(
-    { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
-    secret.jwtSecret,
-    {
-      expiresIn: 60 * 60,
-    }
-  );
-
-  return res
-    .status(200)
-    .cookie("token", jwtToken, {
-      maxAge: 30000000,
-      httpOnly: true,
-    })
-    .json({
-      message: "Everything is correct! You are logged in!",
-    });
+  
 };
 
 exports.postGetLoggedUser = (req, res, next) => {
