@@ -165,7 +165,30 @@ describe("AUTH", () => {
       })
     })
  
-    //TODO Login first, and save cookie to check does user can login again.
+    it("Incorrect user is already logged", done => {
+      request(app).post("/login").send({
+        email: "strongUser0@wp.pl",
+        password: strongPasswords[0]
+      })
+      .then(res => {
+        const cookies = res.headers['set-cookie'];
+
+        request(app).post("/login")
+        .set('Cookie', cookies)
+        .send({
+          email: "strongUser1@wp.pl",
+          password: strongPasswords[1]
+        }).then(result => {
+          const errorMessage = JSON.parse(result.error.text).message;
+          const statusCode = result.statusCode;
+          expect(statusCode).equal(401);
+          expect(errorMessage).equal("Logged users cannot log in again!")
+          done()
+        })
+        .catch(err => done(err))
+      })
+      .catch(err => done(err))
+    })
   });
 
   after(() => {
