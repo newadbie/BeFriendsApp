@@ -1,107 +1,124 @@
-const expect = require("chai").expect;
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const expect = chai.expect;
+
+chai.use(chaiHttp);
+
 const request = require("supertest");
 const myDb = require("../../../db/connectDb");
 const { strongPasswords, weakPasswords } = require("../data");
 
 const app = require("../../../app");
+const { response } = require("../../../app");
 describe("AUTH", () => {
   before(() => {
     myDb
       .connectMongo()
-      .then(() =>  done())
+      .then(() => done())
       .catch((err) => done(err));
   });
   describe("#POST /register", () => {
     it("Correct!, User has been created successfully!", (done) => {
-      request(app)
+      chai
+        .request(app)
         .post("/register")
         .send({
           email: "UserTestNotExist@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOO',
         })
-        .then((res) => {
-          const statusCode = res.statusCode;
-          expect(statusCode).equal(200);
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res).to.have.status(200);
           done();
-        })
-        .catch((err) => done(err));
+        });
     });
 
     it("Incorrect, confirm password does not match to password", (done) => {
-      request(app)
+      chai
+        .request(app)
         .post("/register")
         .send({
           email: "user2@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOQ',
         })
-        .then((result) => {
-          const errorMessage = JSON.parse(result.error.text).message;
-          const statusCode = result.statusCode;
-          expect(statusCode).equal(422);
-          expect(errorMessage).equal("Password does not matches");
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res).to.have.status(422);
+          expect(res.body.message).to.deep.equal("Password does not matches");
 
           done();
-        })
-        .catch((err) => done(err));
+        });
     });
 
     it("Incorrect, email is already in use!", (done) => {
-      request(app)
+      chai
+        .request(app)
         .post("/register")
         .send({
           email: "UserTestNotExist@wp.pl",
           password: "[&vKFw[vHD%N2y=w!",
           confirmPassword: "[&vKFw[vHD%N2y=w!",
         })
-        .then((result) => {
-          const errorMessage = JSON.parse(result.error.text).message;
-          const statusCode = result.statusCode;
-          expect(errorMessage).equal("Email is already in use!");
-          expect(statusCode).equal(422);
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res.body.message).to.deep.have.equal(
+            "Email is already in use!"
+          );
+          expect(res).to.have.status(422);
           done();
-        })
-        .catch((err) => {
-          done(err);
         });
     });
 
     it("Incorrect, empty password", (done) => {
-      request(app)
+      chai
+        .request(app)
         .post("/register")
         .send({
           email: "UserTestNotExist@wp.pl",
           password: "",
           confirmPassword: "",
         })
-        .then((result) => {
-          const errorMessage = JSON.parse(result.error.text).message;
-          const statusCode = result.statusCode;
-          expect(statusCode).equal(422);
-          expect(errorMessage).equal('"password" is not allowed to be empty');
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res).to.have.status(422);
+          console.log(res.body);
+          expect(res.body.message).to.deep.have.equal(
+            '"password" is not allowed to be empty'
+          );
           done();
-        })
-        .catch((err) => done(err));
+        });
     });
 
     weakPasswords.forEach((password, index) => {
       it("Incorrect, weak password", (done) => {
-        request(app)
+        chai
+          .request(app)
           .post("/register")
           .send({
             email: "weakUser" + index + "@wp.pl",
             password: password,
             confirmPassword: password,
           })
-          .then((result) => {
-            const errorMessage = JSON.parse(result.error.text).message;
-            const statusCode = result.statusCode;
-            expect(statusCode).equal(422);
-            expect(errorMessage).equal("Password is too weak!");
+          .end((err, res) => {
+            if (err) {
+              done(err);
+            }
+            expect(res).to.have.status(422);
+            expect(res.body.message).to.deep.have.equal(
+              "Password is too weak!"
+            );
             done();
-          })
-          .catch((err) => done(err));
+          });
       });
     });
 
@@ -124,71 +141,96 @@ describe("AUTH", () => {
     });
 
     //TODO check email validation
+    it("Incorrect, email is not correct", (done) => {
+      chai
+        .request(app)
+        .post("/register")
+        .send({
+          email: "Incorrect.pl",
+          password: strongPasswords[0],
+          confirmPassword: strongPasswords[0],
+        })
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res).to.have.status(422);
+          expect(res.body.message).to.have.deep.equal(
+            '"email" must be a valid email'
+          );
+          done();
+        });
+    });
   });
 
   describe("#POST /login", () => {
     weakPasswords.forEach((password, index) => {
       it("Incorrect user is not created!", (done) => {
-        request(app)
+        chai
+          .request(app)
           .post("/login")
           .send({
             email: "weakUser" + index + "@wp.pl",
             password: password,
           })
-          .then((result) => {
-            const errorMessage = JSON.parse(result.error.text).message;
-            const statusCode = result.statusCode;
+          .end((err, res) => {
+            if (err) {
+              done(err);
+            }
+            expect(res.body.message).to.deep.equal("Email is not registered");
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+    });
 
-            expect(statusCode).equal(401);
-            expect(errorMessage).equal("Email is not registered");
+    strongPasswords.forEach((password, index) => {
+      it("Correct! User is logged in!", (done) => {
+        request(app)
+          .post("/login")
+          .send({
+            email: "strongUser" + index + "@wp.pl",
+            password: password,
+          })
+          .then((result) => {
+            const statusCode = result.statusCode;
+            cookies = result.header["set-cookie"];
+            expect(result.error).equal(false);
+            expect(statusCode).equal(200);
             done();
           })
           .catch((err) => done(err));
       });
     });
-  
-    
-    strongPasswords.forEach((password, index) => {
-      
-      it("Correct! User is logged in!", done => {
-        request(app).post("/login").send({
-          email: "strongUser" + index + "@wp.pl",
-          password: password
-        })
-        .then(result => {
-          const statusCode = result.statusCode;
-          cookies = result.header['set-cookie'];
-          expect(result.error).equal(false)
-          expect(statusCode).equal(200);
-          done();
-        }).catch(err => done(err))
-      })
-    })
- 
-    it("Incorrect user is already logged", done => {
-      request(app).post("/login").send({
-        email: "strongUser0@wp.pl",
-        password: strongPasswords[0]
-      })
-      .then(res => {
-        const cookies = res.headers['set-cookie'];
 
-        request(app).post("/login")
-        .set('Cookie', cookies)
+    it("Incorrect user is already logged", (done) => {
+      request(app)
+        .post("/login")
         .send({
-          email: "strongUser1@wp.pl",
-          password: strongPasswords[1]
-        }).then(result => {
-          const errorMessage = JSON.parse(result.error.text).message;
-          const statusCode = result.statusCode;
-          expect(statusCode).equal(401);
-          expect(errorMessage).equal("Logged users cannot log in again!")
-          done()
+          email: "strongUser0@wp.pl",
+          password: strongPasswords[0],
         })
-        .catch(err => done(err))
-      })
-      .catch(err => done(err))
-    })
+        .then((res) => {
+          const cookies = res.headers["set-cookie"];
+
+          request(app)
+            .post("/login")
+            .set("Cookie", cookies)
+            .send({
+              email: "strongUser1@wp.pl",
+              password: strongPasswords[1],
+            })
+            .then((result) => {
+              const errorMessage = JSON.parse(result.error.text).message;
+              const statusCode = result.statusCode;
+              expect(statusCode).equal(401);
+              expect(errorMessage).equal("Logged users cannot log in again!");
+              done();
+            })
+            .catch((err) => done(err));
+        })
+        .catch((err) => done(err));
+    });
   });
 
   after(() => {
