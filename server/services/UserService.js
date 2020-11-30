@@ -10,7 +10,7 @@ class UserService {
   }
 
   static async getUserIfPasswordIsCorrect(passwordToCompare, userEmail) {
-    const registeredUser = await UserService.getUserByEmail(userEmail);
+    const registeredUser = await this.getUserByEmail(userEmail);
     if (!registeredUser) {
       throw new Error("Email is not registered");
     }
@@ -25,7 +25,7 @@ class UserService {
   static async createNewUser(userMail, userPassword) {
     userMail = userMail.toString().trim();
     userPassword = userPassword.toString().trim();
-    const isEmailRegistered = await UserService.getUserByEmail(userMail);
+    const isEmailRegistered = await this.getUserByEmail(userMail);
     if (isEmailRegistered) {
       throw new Error("Email is already in use!");
     }

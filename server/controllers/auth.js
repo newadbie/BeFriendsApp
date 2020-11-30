@@ -4,7 +4,6 @@ const UserService = require("../services/UserService");
 const jwt = require("jsonwebtoken");
 
 const secret = require("../secret");
-const { getUserIfPasswordIsCorrect } = require("../services/UserService");
 
 exports.postSignUp = async (req, res, next) => {
   if (req.user) {
@@ -41,7 +40,7 @@ exports.postSignIn = async (req, res, next) => {
     return res.status(422).json({ message: error.message });
   }
   try {
-    const user = await getUserIfPasswordIsCorrect(req.body.password, req.body.email);
+    const user = await UserService.getUserIfPasswordIsCorrect(req.body.password, req.body.email);
     const jwtToken = jwt.sign(
       { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
       secret.jwtSecret,
