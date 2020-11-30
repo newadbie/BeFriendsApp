@@ -1,6 +1,8 @@
 import express from "express";
 import mongoose from "mongoose";
 import { URI } from "./secret";
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser';
 
 class App {
   public app: express.Application;
@@ -9,6 +11,8 @@ class App {
   constructor(port: number, controllers?: Array<express.Router>) {
     this.app = express();
     this.port = port;
+    this.app.use(bodyParser.json());
+    this.app.use(cookieParser());
 
     if (controllers) {
       this.initializeControllers(controllers);
