@@ -11,7 +11,7 @@ class UserService {
   static async signInUser(userEmail: string, password: string): Promise<IUser> {
     const user: IUser | null = await this.findByEmail(userEmail);
     if (!user) {
-      throw new Error("This email is not in use");
+      throw new Error("Email is not registered");
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);

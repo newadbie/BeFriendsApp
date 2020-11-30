@@ -69,7 +69,7 @@ class Authorization {
         });
 
     } catch (err) {
-      return res.status(422).json({ message: err.message });
+      return res.status(401).json({ message: err.message });
     }
   };
 

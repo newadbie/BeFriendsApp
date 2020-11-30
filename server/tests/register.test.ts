@@ -160,74 +160,71 @@ describe("AUTH", () => {
     });
   });
 
-  // describe("#POST /login", () => {
-  //   weakPasswords.forEach((password, index) => {
-  //     it("Incorrect user is not created!", (done) => {
-  //       chai
-  //         .request(app)
-  //         .post("/login")
-  //         .send({
-  //           email: "weakUser" + index + "@wp.pl",
-  //           password: password,
-  //         })
-  //         .end((err, res) => {
-  //           if (err) {
-  //             done(err);
-  //           }
-  //           expect(res.body.message).to.deep.equal("Email is not registered");
-  //           expect(res).to.have.status(401);
-  //           done();
-  //         });
-  //     });
-  //   });
+  describe("#POST /login", () => {
+    weakPasswords.forEach((password, index) => {
+      it("Incorrect user is not created!", (done) => {
+        chai
+          .request(app)
+          .post("/login")
+          .send({
+            email: "weakUser" + index + "@wp.pl",
+            password: password,
+          })
+          .end((err, res) => {
+            if (err) {
+              done(err);
+            }
+            expect(res.body.message).to.deep.equal("Email is not registered");
+            expect(res).to.have.status(401);
+            done();
+          });
+      });
+    });
 
-  //   strongPasswords.forEach((password, index) => {
-  //     it("Correct! User is logged in!", (done) => {
-  //       request(app)
-  //         .post("/login")
-  //         .send({
-  //           email: "strongUser" + index + "@wp.pl",
-  //           password: password,
-  //         })
-  //         .then((result) => {
-  //           const statusCode = result.statusCode;
-  //           cookies = result.header["set-cookie"];
-  //           expect(result.error).equal(false);
-  //           expect(statusCode).equal(200);
-  //           done();
-  //         })
-  //         .catch((err) => done(err));
-  //     });
-  //   });
+    strongPasswords.forEach((password, index) => {
+      it("Correct! User is logged in!", (done) => {
+        request(app)
+          .post("/login")
+          .send({
+            email: "strongUser" + index + "@wp.pl",
+            password: password,
+          })
+          .then((result) => {
+            expect(result.error).equal(false);
+            expect(result).to.have.status(200);
+            done();
+          })
+          .catch((err) => done(err));
+      });
+    });
 
-  //   it("Incorrect user is already logged", (done) => {
-  //     request(app)
-  //       .post("/login")
-  //       .send({
-  //         email: "strongUser0@wp.pl",
-  //         password: strongPasswords[0],
-  //       })
-  //       .then((res) => {
-  //         const cookies = res.header["set-cookie"];
+    it("Incorrect user is already logged", (done) => {
+      request(app)
+        .post("/login")
+        .send({
+          email: "strongUser0@wp.pl",
+          password: strongPasswords[0],
+        })
+        .then((res) => {
+          const cookies = res.header["set-cookie"];
 
-  //         request(app)
-  //           .post("/login")
-  //           .set("Cookie", cookies)
-  //           .send({
-  //             email: "strongUser1@wp.pl",
-  //             password: strongPasswords[1],
-  //           })
-  //           .then((result) => {
-  //             const errorMessage = JSON.parse(result.error.text).message;
-  //             expect(result).to.have.status.equal(401);
-  //             expect(errorMessage).equal("Logged users cannot log in again!");
-  //             done();
-  //           })
-  //           .catch((err) => done(err));
-  //       })
-  //       .catch((err) => done(err));
-  //   });
-  // });
+          request(app)
+            .post("/login")
+            .set("Cookie", cookies)
+            .send({
+              email: "strongUser1@wp.pl",
+              password: strongPasswords[1],
+            })
+            .then((result) => {
+              const errorMessage = JSON.parse(result.error.text).message;
+              expect(result).to.have.status(401);
+              done();
+            })
+            .catch((err) => done(err));
+        })
+        .catch((err) => done(err));
+    });
+  });
 
   after(async (done) => {
     done();
