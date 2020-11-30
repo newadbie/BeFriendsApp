@@ -4,7 +4,7 @@ import { Switch } from 'react-router-dom';
 import { PublicRoute } from '../router/PublicRoute';
 import { HomePage } from "../components/HomePage";
 
-import './App.css';
+import './App.scss';
 
 export const App : React.FC = () => {
   return (
