@@ -17,7 +17,7 @@ class Authorization {
     res: express.Response,
     next: express.NextFunction
   ) => {
-    if (req.body.user) {
+    if (res.locals.user) {
       return res.status(401).json({message: "You cannot register, if you are logged in!"});
     }
 
@@ -44,7 +44,7 @@ class Authorization {
     res: express.Response,
     next: express.NextFunction
   ) => {
-    if (req.body.user) {
+    if (res.locals.user) {
       return res.status(401).json({message: "Logged user cannot log in again!"});
     }
 

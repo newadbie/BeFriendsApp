@@ -16,7 +16,7 @@ const isLogged = async (
   if (!user) {
     return next();
   }
-  req.body.user = user;
+  res.locals.user = user;
   return next();
 };
 
