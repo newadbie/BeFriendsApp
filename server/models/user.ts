@@ -1,11 +1,37 @@
 import mongoose, { Schema, Document } from "mongoose";
-
+import Joi, { ErrorReport } from 'joi';
 
 export interface IUser extends Document {
   email: string;
   password: string;
   logoutFromAllDevicesKey: string;
 }
+
+export const joiLoginSchema = Joi.object().keys({
+  email: Joi.string().required().email().normalize().trim(),
+  password: Joi.string().normalize().required().trim(),
+});
+
+export const joiRegisterSchema = Joi.object().keys({
+    email: Joi.string().email().normalize().trim().required(),
+    password: Joi.string().normalize().trim().required()
+    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#<>()\$%\^&\*])(?=.{8,}).*/)
+    .message("Password is too weak!"),
+    confirmPassword: Joi.string()
+    .trim()
+    .valid(Joi.ref("password"))
+    .required()
+      .error((errors : any ) => {
+        errors.forEach((err : any) => {
+          switch (err.code) {
+            case "any.only":
+              err.message = "Password does not matches";
+              break;
+          }
+        });
+        return errors;
+      }),
+  });
 
 export const userSchema: Schema = new Schema({
   email: {

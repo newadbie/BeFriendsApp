@@ -1,4 +1,4 @@
-module.exports.weakPasswords = [
+export const weakPasswords : Array<string>  = [
   "|%/*+}+%{{#>-%,",
   "&={:$'^:'?`^_?>)",
   "?}?#]#~-&?(#]-{[",
@@ -19,7 +19,7 @@ module.exports.weakPasswords = [
   "WMVOPDLROMCXCULQ",
   "BJLPXENASISLOVIA",
 
-  "\5@~<$.*&-$1(~2!",
+  "/5@~<$.*&-$1(~2!",
   "6];-_^[*'&4)1-[",
   "2:,)_{*>>+0|(.+",
   "?`|$-&(|3638<~|",
@@ -73,8 +73,8 @@ module.exports.weakPasswords = [
   "d?Q[Ja4",
 ];
 
-module.exports.strongPasswords = [
-    "1`fqs\5e*z1@sO)o",
+export const strongPasswords : Array<string> = [
+    "1`fqs/5e*z1@sO)o",
     'mMWX*R2y/VD|0"NE',
     "01%2y)y)bb.*FNPX",
     "w7(A@%Gdn|[u(Qua",
