@@ -2,12 +2,13 @@ import React from "react";
 import { Route, RouteProps } from "react-router-dom";
 
 interface PublicRouteProps extends RouteProps {
-  component: any;
+  path: string,
+  component: any
 }
 
 export const PublicRoute: React.FC<PublicRouteProps> = ({
   component: Component,
-  ...rest
+  path: Path
 }) => {
-  return <Route render={(props) => <Component {...props} />} {...rest} />;
+  return <Route path={Path} render={Component}></Route>;
 };

@@ -3,6 +3,6 @@ import { AppNavbar } from '../containers/AppNavbar';
 
 export const HomePage : React.FC = () => {
     return(
-        <AppNavbar />
-    )
+        <h1>Hello world</h1>
+        )
 }

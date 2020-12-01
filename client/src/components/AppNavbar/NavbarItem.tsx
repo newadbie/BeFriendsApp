@@ -1,23 +1,17 @@
-import React from 'react';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
 export interface NavbarItemProps {
-    href : string,
-    text : string,
-    active: boolean,
+  href: string;
+  text: string;
 }
 
-export const NavbarItem : React.FC<NavbarItemProps> = ({href, text, active}) => {
-    const determineClass = () => {
-        if (active) {
-            return 'app-navbar-link active';
-        } else {
-            return 'app-navbar-link';
-        }
-    }
-    
-    return (
-        <li className={determineClass()}>
-            <a href={href}>{text}</a>
-        </li>
-    )
-}
+export const NavbarItem: React.FC<NavbarItemProps> = ({ href, text }) => {
+  return (
+    <li className="app-navbar-link">
+      <NavLink exact to={href}>
+        {text}
+      </NavLink>
+    </li>
+  );
+};

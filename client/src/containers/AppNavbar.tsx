@@ -7,11 +7,11 @@ export const AppNavbar : React.FC = () => {
     return (
         <nav className="app-navbar">
             <NavbarList>
-                <NavbarItem href="/" text="Homepage" active={false} />
+                <NavbarItem href="/" text="Homepage" />
             </NavbarList>
             <NavbarList float={1}>
-                <NavbarItem href="/logout" text="Logout" active={true} />
-                <NavbarItem href="/login" text="Login" active={false} />
+                <NavbarItem href="/logout" text="Logout" />
+                <NavbarItem href="/login" text="Login" />
             </NavbarList>
         </nav>
     )
