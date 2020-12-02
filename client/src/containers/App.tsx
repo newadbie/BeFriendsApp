@@ -3,27 +3,26 @@ import { Helmet } from "react-helmet";
 import { Switch } from "react-router-dom";
 import { PublicRoute } from "../router/PublicRoute";
 import { UnLoggedRoute } from "../router/UnLoggedRoute";
-import { AppNavbar } from "./AppNavbar";
 import { AppLogin } from "./AppLogin";
 import { HomePage } from "../components/Homepage";
-
+import { useSelector } from "react-redux";
+import { getAuth } from "../selectors";
 import "./App.scss";
-import { Container } from "react-bootstrap";
 
 export const App: React.FC = () => {
+  const isAuthenticated: boolean = useSelector(getAuth).isAuthenticated;
+  
+  console.log(isAuthenticated);
   return (
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Po przyjacielsku!</title>
       </Helmet>
-      <AppNavbar />
-      <Container fluid className="p-3">
         <Switch>
           <UnLoggedRoute path="/login" component={AppLogin} />
           <PublicRoute path="/" component={HomePage} />
         </Switch>
-      </Container>
     </React.Fragment>
   );
 };
