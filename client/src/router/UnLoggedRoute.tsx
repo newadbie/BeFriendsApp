@@ -1,20 +1,21 @@
-import React, { useEffect } from "react";
-import { Route, RouteProps } from "react-router-dom";
-import axios from 'axios';
+import React from "react";
+import { Redirect, Route, RouteProps } from "react-router-dom";
+import { getAuth } from "../selectors";
+import { useSelector } from "react-redux";
 
 interface PublicRouteProps extends RouteProps {
-  path: string,
-  component: any
+  path: string;
+  component: any;
 }
 
-export const PublicRoute: React.FC<PublicRouteProps> = ({
+export const UnLoggedRoute: React.FC<PublicRouteProps> = ({
   component: Component,
-  path: Path
+  path: Path,
 }) => {
-    useEffect(() => {
-        console.log("laj ;aj laj")
-    },[])
-  return <Route path={Path}>
-    <Component />
-  </Route>;
+  const { isAuthenticated } = useSelector(getAuth);
+  return (
+    <Route path={Path}>
+      {!isAuthenticated ? <Component /> : <Redirect to="/" />}
+    </Route>
+  );
 };
