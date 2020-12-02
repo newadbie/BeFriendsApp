@@ -1,9 +1,8 @@
 import express from "express";
-import mongoose from "mongoose";
-import { URI } from "./secret";
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser';
 import {connectMongo} from './db/connectDb';
+import cors from 'cors';
 
 class App {
   public app: express.Application;
@@ -14,6 +13,10 @@ class App {
     this.port = port;
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
+    this.app.use(cors({
+      credentials: true,
+      origin:true,
+    }));
     if (controllers) {
       this.initializeControllers(controllers);
     }

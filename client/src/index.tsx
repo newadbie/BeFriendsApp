@@ -4,8 +4,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { App } from "./containers/App";
 
-import history from './utils/history';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <Router>

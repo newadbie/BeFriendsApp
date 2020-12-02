@@ -8,8 +8,13 @@ export interface IUser extends Document {
 }
 
 export const joiLoginSchema = Joi.object().keys({
-  email: Joi.string().required().email().normalize().trim(),
-  password: Joi.string().normalize().required().trim(),
+  email: Joi.string().required().empty().email().normalize().trim().messages({
+    "string.empty": 'Email is required',
+    "string.email": "Email is not valid"
+  }),
+  password: Joi.string().empty().required().normalize().trim().messages({
+    "string.empty": 'Password is required'
+  }),
 });
 
 export const joiRegisterSchema = Joi.object().keys({

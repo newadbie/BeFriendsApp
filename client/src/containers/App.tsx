@@ -2,16 +2,13 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import { Switch } from "react-router-dom";
 import { PublicRoute } from "../router/PublicRoute";
-import { HomePage } from "../components/HomePage";
 import { AppNavbar } from "./AppNavbar";
-import { AppLogin } from "./AppLogin";
-import Wrapper from "../components/hoc/wrapper";
+import  { AppLogin } from "./AppLogin";
+import {HomePage} from "../components/Homepage";
 
 import "./App.scss";
+import { Container } from "react-bootstrap";
 
-const testComp: React.FC = () => {
-  return <h1> HELLO WORLD</h1>;
-};
 
 export const App: React.FC = () => {
   return (
@@ -21,13 +18,12 @@ export const App: React.FC = () => {
         <title>Po przyjacielsku!</title>
       </Helmet>
       <AppNavbar />
-      <Wrapper fluid>
+      <Container fluid className="p-3">
         <Switch>
           <PublicRoute path="/login" component={AppLogin} />
-          <PublicRoute path="/logout" component={HomePage} />
           <PublicRoute path="/" component={HomePage} />
         </Switch>
-      </Wrapper>
+      </Container>
     </React.Fragment>
   );
 };

@@ -11,12 +11,12 @@ class UserService {
   static async signInUser(userEmail: string, password: string): Promise<IUser> {
     const user: IUser | null = await this.findByEmail(userEmail);
     if (!user) {
-      throw new Error("Email is not registered");
+      throw new Error("Email or password is incorrect");
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
     if (!isPasswordCorrect) {
-      throw new Error("Incorrect password");
+      throw new Error("Email or password is incorrect");
     }
     return user;
   }

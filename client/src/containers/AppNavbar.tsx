@@ -1,18 +1,12 @@
-import React from 'react';
-import { NavbarItem } from '../components/AppNavbar/NavbarItem';
-import { NavbarList } from '../components/AppNavbar/NavbarList';
+import React from "react";
+import { Navbar } from "react-bootstrap";
+import { NavbarList } from "../components/NavbarList";
 
-export const AppNavbar : React.FC = () => {
-
-    return (
-        <nav className="app-navbar">
-            <NavbarList>
-                <NavbarItem href="/" text="Homepage" />
-            </NavbarList>
-            <NavbarList float={1}>
-                <NavbarItem href="/logout" text="Logout" />
-                <NavbarItem href="/login" text="Login" />
-            </NavbarList>
-        </nav>
-    )
-}
+export const AppNavbar: React.FC = () => {
+  return (
+    <Navbar bg="dark" variant="dark">
+      <Navbar.Brand>Po przyjacielsku</Navbar.Brand>
+      <NavbarList />
+    </Navbar>
+  );
+};

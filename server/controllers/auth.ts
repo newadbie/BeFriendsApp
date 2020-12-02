@@ -50,7 +50,7 @@ class Authorization {
 
     const { error } = joiLoginSchema.validate(req.body);
     if (error) {
-      return res.status(422).json({ message: error.message });
+      return res.json(error.message).status(422);
     }
     const { email, password } = req.body;
 
@@ -59,17 +59,16 @@ class Authorization {
       const jwtToken = TokenService.generateJwtToken(loggedUser);
 
       return res
-        .status(200)
         .cookie("token", jwtToken, {
           maxAge: 30000000,
           httpOnly: true,
         })
         .json({
           message: "Everything is correct! You are logged in!",
-        });
+        }).status(200);
 
     } catch (err) {
-      return res.status(401).json({ message: err.message });
+      return res.json({ message: err.message }).status(401);
     }
   };
 
