@@ -4,13 +4,14 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import { App } from "./containers/App";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import rootReducer from './slices'
+import rootReducer from "./slices";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { configureStore } from "@reduxjs/toolkit";
 
-const store = createStore(
-  rootReducer,
-  );
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: true
+});
 
 ReactDOM.render(
   <Provider store={store}>
