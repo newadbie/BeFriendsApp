@@ -1,5 +1,3 @@
-import React from 'react';
-
 export interface AuthState {
     currentUser: object,
     isAuthenticated: boolean

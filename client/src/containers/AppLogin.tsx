@@ -2,27 +2,27 @@ import React, { useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { AppLoginForm } from "../components/AppLoginForm";
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 export const AppLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const submit = () => {
     axios
-      .post(
-        "http://localhost:8080/login",
-        {
-          email: email,
-          password: password,
-        },
-        { withCredentials: true }
+    .post(
+      "http://localhost:8080/login",
+      {
+        email: email,
+        password: password,
+      },
+      { withCredentials: true }
       )
       .then((res) => {
-        console.log(res.data);
+        return (<Redirect to="/" />)
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
       });
   };
 
@@ -34,7 +34,6 @@ export const AppLogin = () => {
         setEmail={setEmail}
         password={password}
         setPassword={setPassword}
-        confirmPassword={confirmPassword}
         preventDefault
       >
         <Button

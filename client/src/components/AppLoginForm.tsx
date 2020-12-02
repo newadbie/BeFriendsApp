@@ -6,7 +6,6 @@ type LoginFormProps = {
   setEmail(value: string): void;
   password: string;
   setPassword(value: string): void;
-  confirmPassword: string;
   preventDefault?: boolean;
 };
 

@@ -50,7 +50,7 @@ class Authorization {
 
     const { error } = joiLoginSchema.validate(req.body);
     if (error) {
-      return res.json(error.message).status(422);
+      return res.status(422).json(error.message);
     }
     const { email, password } = req.body;
 
@@ -68,7 +68,7 @@ class Authorization {
         }).status(200);
 
     } catch (err) {
-      return res.json({ message: err.message }).status(401);
+      return res.status(401).json({ message: err.message });
     }
   };
 
