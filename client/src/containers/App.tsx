@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { login } from "../slices/authSlice";
-
 import "./App.scss";
 import Routes from "../components/Routes";
 
@@ -22,7 +21,7 @@ export const App: React.FC = () => {
         }
       })
       .finally(() => {
-        setLoading(false);
+          setLoading(false);
       });
   }, []);
 
@@ -32,7 +31,7 @@ export const App: React.FC = () => {
         <meta charSet="utf-8" />
         <title>Po przyjacielsku!</title>
       </Helmet>
-      <Routes isLoading={loading}/>
+      <Routes isLoading={loading} />
     </>
   );
 };
