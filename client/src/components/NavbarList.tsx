@@ -3,7 +3,8 @@ import Nav from "react-bootstrap/Nav";
 import { LinkContainer } from "react-router-bootstrap";
 import axios from "axios";
 import { logout } from "../slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth } from "../selectors";
 
 export enum positions {
   left,
@@ -16,6 +17,7 @@ type NavbarListPosition = {
 
 export const NavbarList: React.FC<NavbarListPosition> = ({ position }) => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(getAuth).isAuthenticated;
 
   const determineClass = () => {
     if (position === positions.left) {
@@ -32,12 +34,15 @@ export const NavbarList: React.FC<NavbarListPosition> = ({ position }) => {
 
   return (
     <Nav className={determineClass()}>
-      <LinkContainer exact to="/login">
-        <Nav.Link>Zaloguj</Nav.Link>
-      </LinkContainer>
-      <LinkContainer exact to="/">
-        <Nav.Link onClick={signOut}>Wyloguj</Nav.Link>
-      </LinkContainer>
+      {!isAuthenticated ? (
+        <LinkContainer exact to="/login">
+          <Nav.Link>Zaloguj</Nav.Link>
+        </LinkContainer>
+      ) : (
+        <LinkContainer exact to="/">
+          <Nav.Link onClick={signOut}>Wyloguj</Nav.Link>
+        </LinkContainer>
+      )}
     </Nav>
   );
 };

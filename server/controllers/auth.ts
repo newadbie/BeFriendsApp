@@ -1,7 +1,7 @@
 import express from "express";
 import isLogged from "../middlewares/isLogged";
 import UserService from "../services/UserService";
-import TokenService from '../services/JwtService';
+import TokenService from "../services/JwtService";
 import { joiRegisterSchema, joiLoginSchema } from "../models/user";
 
 class Authorization {
@@ -12,13 +12,31 @@ class Authorization {
     this.initializeRouter();
   }
 
+  checkLogin = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    if (res.locals.user) {
+      return res
+        .status(200)
+        .json({ isLogged: true, userEmail: res.locals.user.email });
+    } else {
+      return res
+        .status(200)
+        .json({ isLogged: false, message: "User is not logged" });
+    }
+  };
+
   signUp = async (
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
   ) => {
     if (res.locals.user) {
-      return res.status(401).json({message: "You cannot register, if you are logged in!"});
+      return res
+        .status(401)
+        .json({ message: "You cannot register, if you are logged in!" });
     }
 
     const { error } = joiRegisterSchema.validate(req.body);
@@ -45,7 +63,9 @@ class Authorization {
     next: express.NextFunction
   ) => {
     if (res.locals.user) {
-      return res.status(401).json({message: "Logged user cannot log in again!"});
+      return res
+        .status(401)
+        .json({ message: "Logged user cannot log in again!" });
     }
 
     const { error } = joiLoginSchema.validate(req.body);
@@ -65,21 +85,29 @@ class Authorization {
         })
         .json({
           message: "Everything is correct! You are logged in!",
-        }).status(200);
-
+        })
+        .status(200);
     } catch (err) {
       return res.status(401).json({ message: err.message });
     }
   };
 
-  signOut = (req : express.Request, res : express.Response, next : express.NextFunction) => {
-    return res.clearCookie("token").status(200).json({ message: "You have signed out!" });
-  }
+  signOut = (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    return res
+      .clearCookie("token")
+      .status(200)
+      .json({ message: "You have signed out!" });
+  };
 
   private initializeRouter() {
     this.router.post("/register", isLogged, this.signUp);
     this.router.post("/login", isLogged, this.signIn);
     this.router.post("/logout", this.signOut);
+    this.router.post("/checkLogin", isLogged, this.checkLogin);
   }
 
   public getRouter() {

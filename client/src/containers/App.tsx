@@ -1,28 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Switch } from "react-router-dom";
-import { PublicRoute } from "../router/PublicRoute";
-import { UnLoggedRoute } from "../router/UnLoggedRoute";
-import { AppLogin } from "./AppLogin";
-import { HomePage } from "../components/Homepage";
-import { useSelector } from "react-redux";
-import { getAuth } from "../selectors";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../slices/authSlice";
+
 import "./App.scss";
+import Routes from "../components/Routes";
 
 export const App: React.FC = () => {
-  const isAuthenticated: boolean = useSelector(getAuth).isAuthenticated;
-  
-  console.log(isAuthenticated);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios
+      .post("http://localhost:8080/checkLogin", {}, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        const isLogged: boolean = res.data.isLogged;
+        if (isLogged) {
+          dispatch(login());
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <React.Fragment>
+    <>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Po przyjacielsku!</title>
       </Helmet>
-        <Switch>
-          <UnLoggedRoute path="/login" component={AppLogin} />
-          <PublicRoute path="/" component={HomePage} />
-        </Switch>
-    </React.Fragment>
+      <Routes isLoading={loading}/>
+    </>
   );
 };
