@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Switch } from "react-router-dom";
 import { AppLogin } from "../containers/AppLogin";
 import { PublicRoute } from "../router/PublicRoute";
 import { UnLoggedRoute } from "../router/UnLoggedRoute";
