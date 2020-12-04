@@ -4,6 +4,7 @@ import { PublicRoute } from "../router/PublicRoute";
 import { UnLoggedRoute } from "../router/UnLoggedRoute";
 import { HomePage } from "./Homepage";
 import { CSSTransition } from "react-transition-group";
+import { Switch } from "react-router-dom";
 
 type RouteProps = {
   isLoading: boolean;
