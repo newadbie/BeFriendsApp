@@ -8,6 +8,8 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-navigation/drawer": "^5.11.4",
+    "@react-navigation/native": "^5.8.10",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/react-redux": "^7.1.11",
     "axios": "^0.21.0",
@@ -16,7 +18,10 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.4.tar.gz",
+    "react-native-gesture-handler": "^1.9.0",
+    "react-native-reanimated": "^1.13.2",
     "react-native-responsive-screen": "^1.4.1",
+    "react-native-screens": "^2.15.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2"
   },

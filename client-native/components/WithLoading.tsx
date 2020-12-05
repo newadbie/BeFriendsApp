@@ -3,14 +3,17 @@ import { Spinner } from "./Spinner";
 
 export type SpinerChildrenState = {
   setLoadingState(value: boolean): void | Promise<void>;
+  navigation: any;
 };
 
 interface SpinnerWrapperProps {
   Component: React.FC<SpinerChildrenState>;
+  navigation: any;
 }
 
 export const WithLoading: React.FC<SpinnerWrapperProps> = ({
   Component,
+  navigation,
   ...props
 }) => {
   const [isLoading, setLoadingState] = useState(false);
@@ -19,7 +22,7 @@ export const WithLoading: React.FC<SpinnerWrapperProps> = ({
       {isLoading === true ? (
         <Spinner />
       ) : (
-        <Component setLoadingState={setLoadingState} {...props} />
+        <Component setLoadingState={setLoadingState} navigation={navigation} {...props} />
       )}
     </>
   );

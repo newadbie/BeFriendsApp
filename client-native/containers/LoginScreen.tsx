@@ -15,7 +15,7 @@ import { Button } from '../components/Button';
 
 import { SpinerChildrenState } from '../components/WithLoading';
 
-export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState}) => {
+export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState, navigation}) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,11 +34,12 @@ export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState}) =>
       .catch((err) => {
         setError(err.response.data);
       })
-      .finally(() => setLoadingState(false));
+      .finally(() => {
+        setLoadingState(false)
+      })
   };
 
   return (
-    <View>
       <View style={styles.container}>
         <Text style={styles.header}>Zaloguj się!</Text>
         <LoginInput text="Email" value={email} changeValueAction={setEmail} />
@@ -52,7 +53,6 @@ export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState}) =>
         <Button title="Zaloguj się" onPress={signIn}/>
         <Error text={error} />
       </View>
-    </View>
   );
 };
 
@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     width: wp("75%"),
+    marginLeft: wp("12.5%"),
   },
   header: {
     textAlign: "center",

@@ -1,3 +1,4 @@
+import "react-native-gesture-handler";
 import React from "react";
 import rootReducer from "./slices";
 import { configureStore } from "@reduxjs/toolkit";

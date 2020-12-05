@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../slices/authSlice";
-import { getAuth } from "../selectors";
-import { LoanScreen } from "./LoanScreen";
-import { LoginScreen } from "./LoginScreen";
+import { LoginScreen } from "../routes/WithLoadingScreens";
 import { Spinner } from "../components/Spinner";
-import { WithLoading } from "../components/WithLoading";
+
+import { getAuth } from "../selectors/";
+import { HomeScreen, LogoutScreen } from "../routes/WithLoadingScreens";
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+
+const Drawer = createDrawerNavigator();
 
 export const Application = () => {
   const isAuthenticated = useSelector(getAuth).isAuthenticated;
@@ -28,18 +32,21 @@ export const Application = () => {
       });
   }, []);
 
-  if(!isLoaded) {
-    return <Spinner />
+  if (!isLoaded) {
+    return <Spinner />;
+  }
+
+  if (!isAuthenticated) {
+    return <LoginScreen />;
   }
 
   return (
-    <View style={styles.container}>
-      {isAuthenticated ? (
-        <WithLoading Component={LoanScreen} />
-      ) : (
-        <WithLoading Component={LoginScreen} />
-      )}
-    </View>
+    <NavigationContainer>
+      <Drawer.Navigator initialRouteName="Home Screen" openByDefault={true}>
+        <Drawer.Screen component={HomeScreen} name="Home Screen" />
+        <Drawer.Screen component={LogoutScreen} name="Logout" />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 };
 const styles = StyleSheet.create({
