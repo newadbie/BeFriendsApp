@@ -1,9 +1,9 @@
 export interface AuthState {
     // currentUser: object,
     userEmail: string,
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
 }
 
 export interface RootState {
-    authState: AuthState
+    authState: AuthState,
 }

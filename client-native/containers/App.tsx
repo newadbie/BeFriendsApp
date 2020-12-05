@@ -4,14 +4,14 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../slices/authSlice";
 import { getAuth } from "../selectors";
-import {LoanScreen} from './LoanScreen';
-import {LoginScreen} from './LoginScreen';
-
+import { LoanScreen } from "./LoanScreen";
+import { LoginScreen } from "./LoginScreen";
+import { Spinner } from "../components/Spinner";
+import { WithLoading } from "../components/WithLoading";
 
 export const Application = () => {
-  const [isLoading, setLoading] = useState(true);
   const isAuthenticated = useSelector(getAuth).isAuthenticated;
-
+  const [isLoaded, setLoaded] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,20 +23,22 @@ export const Application = () => {
         }
       })
       .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoaded(true);
+      });
   }, []);
 
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <Text>Ładowanie...</Text>
-      </View>
-    );
+  if(!isLoaded) {
+    return <Spinner />
   }
 
   return (
     <View style={styles.container}>
-      {isAuthenticated ? <LoanScreen /> : <LoginScreen />}
+      {isAuthenticated ? (
+        <WithLoading Component={LoanScreen} />
+      ) : (
+        <WithLoading Component={LoginScreen} />
+      )}
     </View>
   );
 };

@@ -7,7 +7,6 @@ export interface ButtonProps {
 }
 
 export const Button : React.FC<ButtonProps> = ({onPress, title}) => {
-
     return (
         <TouchableHighlight  
         activeOpacity={0.6}
@@ -20,6 +19,7 @@ export const Button : React.FC<ButtonProps> = ({onPress, title}) => {
 
 const styles = StyleSheet.create({
     button: {
+        zIndex:1,
         backgroundColor: "#33b5e5",
         paddingVertical: 15,
         elevation: 6

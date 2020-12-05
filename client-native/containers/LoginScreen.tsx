@@ -13,13 +13,16 @@ import { LoginInput } from "../components/LoginInput";
 import { Error } from "../components/Error";
 import { Button } from '../components/Button';
 
-export const LoginScreen: React.FC = () => {
+import { SpinerChildrenState } from '../components/WithLoading';
+
+export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState}) => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const signIn = async () => {
+    setLoadingState(true);
     axios
       .post("http://192.168.0.241:8080/login", {
         email: email,
@@ -30,7 +33,8 @@ export const LoginScreen: React.FC = () => {
       })
       .catch((err) => {
         setError(err.response.data);
-      });
+      })
+      .finally(() => setLoadingState(false));
   };
 
   return (

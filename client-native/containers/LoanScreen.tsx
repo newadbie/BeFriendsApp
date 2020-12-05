@@ -11,16 +11,20 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import { Button } from '../components/Button';
+import { SpinerChildrenState } from '../components/WithLoading';
 
-export const LoanScreen = () => {
+
+export const LoanScreen : React.FC<SpinerChildrenState> = ({setLoadingState}) => {
   const dispatch = useDispatch();
   const signOut = () => {
+    setLoadingState(true);
     axios
       .post("http://192.168.0.241:8080/logout")
       .then(() => {
         dispatch(logout());
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoadingState(false));
   };
   return (
     <View style={styles.container}>
