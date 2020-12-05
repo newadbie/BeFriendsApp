@@ -12,6 +12,13 @@ class Authorization {
     this.initializeRouter();
   }
 
+  private initializeRouter() {
+    this.router.post("/register", isLogged, this.signUp);
+    this.router.post("/login", isLogged, this.signIn);
+    this.router.post("/logout", this.signOut);
+    this.router.post("/checkLogin", isLogged, this.checkLogin);
+  }
+
   checkLogin = async (
     req: express.Request,
     res: express.Response,
@@ -103,12 +110,7 @@ class Authorization {
       .json({ message: "You have signed out!" });
   };
 
-  private initializeRouter() {
-    this.router.post("/register", isLogged, this.signUp);
-    this.router.post("/login", isLogged, this.signIn);
-    this.router.post("/logout", this.signOut);
-    this.router.post("/checkLogin", isLogged, this.checkLogin);
-  }
+
 
   public getRouter() {
     return this.router;

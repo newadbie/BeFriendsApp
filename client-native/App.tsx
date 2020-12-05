@@ -1,24 +1,19 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { LoginScreen } from './containers/LoginScreen';
+import rootReducer from "./slices";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import { Application } from "./containers/App";
 
 const App = () => {
+  const store = configureStore({
+    reducer: rootReducer,
+  });
+
   return (
-    <View style={styles.container}>
-      <LoginScreen />
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <Application />
+    </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 export default App;
