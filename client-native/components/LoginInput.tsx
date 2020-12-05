@@ -9,10 +9,6 @@ export type LoginInputProps = {
 }
 
 export const LoginInput : React.FC<LoginInputProps> = ({text, value, changeValueAction, secureTextEntry}) => {
-    // if (!secureTextEntry) {
-    //     console.log(secureTextEntry + "auu")
-    //     secureTextEntry = false;
-    // }
     return (
         <View style={styles.container}>
             <Text style={styles.center}>{text}</Text>
@@ -31,13 +27,14 @@ const styles = StyleSheet.create({
         marginBottom:2
     },
     input: {
-        borderColor: "blue",
+        borderColor: "#CCC",
         borderWidth: 1,
         paddingLeft: 5,
         paddingRight: 5,
       },
       center: {
         textAlign: "center",
+        fontSize: 20,
         paddingBottom: 5,
       },
 })

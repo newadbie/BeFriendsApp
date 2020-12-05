@@ -1,18 +1,23 @@
+import React, { useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import React, { useState } from "react";
-import { View, StyleSheet, Text, Button } from "react-native";
-import { login } from "../slices/authSlice";
-import {useDispatch} from 'react-redux';
-import { LoginInput } from "../components/LoginInput";
+import { View, StyleSheet, Text } from "react-native";
+import { useDispatch } from "react-redux";
+
 import axios from "axios";
+
+import { login } from "../slices/authSlice";
+import { LoginInput } from "../components/LoginInput";
+import { Error } from "../components/Error";
+import { Button } from '../components/Button';
 
 export const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const signIn = async () => {
     axios
@@ -21,24 +26,27 @@ export const LoginScreen: React.FC = () => {
         password: password,
       })
       .then((e) => {
-        dispatch(login(email))
+        dispatch(login(email));
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setError(err.response.data);
+      });
   };
 
   return (
     <View>
       <View style={styles.container}>
-        <Text style={styles.header}>Login!</Text>
+        <Text style={styles.header}>Zaloguj się!</Text>
         <LoginInput text="Email" value={email} changeValueAction={setEmail} />
         <LoginInput
-          text="Password"
+          text="Hasło"
           value={password}
           changeValueAction={setPassword}
           secureTextEntry
         />
         <View style={{ marginTop: 10 }}></View>
-        <Button title="Zaloguj się" onPress={signIn} />
+        <Button title="Zaloguj się" onPress={signIn}/>
+        <Error text={error} />
       </View>
     </View>
   );
@@ -48,9 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    height: 300,
     width: wp("75%"),
-    marginBottom: 130,
   },
   header: {
     textAlign: "center",
@@ -58,4 +64,7 @@ const styles = StyleSheet.create({
     fontSize: 26,
     marginBottom: 30,
   },
+  button: {
+    fontSize:20
+  }
 });

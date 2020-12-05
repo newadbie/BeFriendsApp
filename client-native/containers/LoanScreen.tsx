@@ -1,8 +1,16 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from "react-native-responsive-screen";
+
+import { View, Text, StyleSheet } from "react-native";
 import { logout } from "../slices/authSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+
+import { Button } from '../components/Button';
 
 export const LoanScreen = () => {
   const dispatch = useDispatch();
@@ -15,9 +23,17 @@ export const LoanScreen = () => {
       .catch((err) => console.log(err));
   };
   return (
-    <View>
-      <Text>Hejka</Text>
+    <View style={styles.container}>
       <Button title="Wyloguj się" onPress={signOut} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: wp("75%"),
+    alignContent: "center",
+    justifyContent: "center"
+  }
+})
