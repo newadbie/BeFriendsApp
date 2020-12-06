@@ -28,7 +28,11 @@ class Authorization {
       console.log(res.locals.user);
       return res
         .status(200)
-        .json({ isLogged: true, userEmail: res.locals.user.email, userName: res.locals.user.name });
+        .json({
+          isLogged: true,
+          userEmail: res.locals.user.email,
+          userName: res.locals.user.name,
+        });
     } else {
       return res
         .status(200)
@@ -111,7 +115,7 @@ class Authorization {
       .json({ message: "You have signed out!" });
   };
 
-  public getRouter() {
+  public getRouter(): express.Router {
     return this.router;
   }
 }
