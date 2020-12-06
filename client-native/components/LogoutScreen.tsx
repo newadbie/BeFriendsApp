@@ -18,8 +18,10 @@ export const LogoutScreen: React.FC<SpinerChildrenState> = ({
         setLoadingState(false);
         dispatch(logout());
       })
-      .catch((err) => console.log(err))
-      .finally(() => setLoadingState(false));
+      .catch((err) => {
+        setLoadingState(false);
+        console.log(err);
+      });
   });
 
   return <></>;
