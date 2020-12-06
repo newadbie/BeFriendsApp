@@ -1,17 +1,18 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableHighlight} from 'react-native'
+import {StyleProp, StyleSheet, Text, TouchableHighlight} from 'react-native'
 
 export interface ButtonProps {
     onPress(): Promise<void> | void,
-    title: string
+    title: string,
+    style?: object
 }
 
-export const Button : React.FC<ButtonProps> = ({onPress, title}) => {
+export const Button : React.FC<ButtonProps> = ({onPress, title, style}) => {
     return (
         <TouchableHighlight  
         activeOpacity={0.6}
         underlayColor="#0099CC"
-        onPress={onPress} style={styles.button}>
+        onPress={onPress} style={[styles.button, style]}>
             <Text style={styles.text}>{title}</Text>
         </TouchableHighlight>
     )

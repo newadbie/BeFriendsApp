@@ -31,21 +31,23 @@ export const Application = () => {
       .finally(() => {
         setLoaded(true);
       });
+
+      return () => setLoaded(true);
   }, []);
 
   if (!isLoaded) {
     return <Spinner />;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && isLoaded) {
     return <LoginScreen />;
   }
 
   return (
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home Screen">
-        <Drawer.Screen component={HomeScreen} name="Home Screen" />
-        <Drawer.Screen component={LogoutScreen} name="Logout" />
+        <Drawer.Screen component={HomeScreen} name="Strona główna" />
+        <Drawer.Screen component={LogoutScreen} name="Wyloguj się" />
       </Drawer.Navigator>
     </NavigationContainer>
   );
