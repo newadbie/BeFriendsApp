@@ -1,18 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet, Alert } from "react-native";
-
-import { useSelector } from "react-redux";
-import { getAuth } from "../selectors";
-
+import { View, Text, Alert, StyleSheet } from "react-native";
+import { Button } from "./Button";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
-import { Button } from "../components/Button";
+import { useSelector } from "react-redux";
+import { getAuth } from "../selectors";
 
 export const HomeScreen = ({ navigation }: any) => {
-  const isAuthorizated = useSelector(getAuth).isAuthenticated;
   const userName = useSelector(getAuth).userName;
+
   return (
     <View style={styles.container}>
       <Text style={[styles.textHeader, styles.textCenter]}>
@@ -25,20 +23,27 @@ export const HomeScreen = ({ navigation }: any) => {
         </Text>
       </View>
       <View>
-        <Button title="Pokaż dłużników" style={styles.button} onPress={() => Alert.alert("AUU")} />
-        <Button title="Dodaj dłużnika"  style={styles.button} onPress={() => Alert.alert("AUU")} />
+        <Button
+          title="Pokaż dłużników"
+          style={styles.button}
+          onPress={() => Alert.alert("test")}
+        />
+        <Button
+          title="Dodaj dłużnika"
+          style={styles.button}
+          onPress={() => { Alert.alert("test")}}
+        />
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     width: wp("75%"),
     marginLeft: wp("12.5%"),
-    flex:1,
-    alignContent: 'center',
-    justifyContent: 'center'
+    flex: 1,
+    alignContent: "center",
+    justifyContent: "center",
   },
   textHeader: {
     marginTop: 20,

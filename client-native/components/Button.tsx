@@ -20,7 +20,7 @@ export const Button : React.FC<ButtonProps> = ({onPress, title, style}) => {
 
 const styles = StyleSheet.create({
     button: {
-        zIndex:1,
+        zIndex:-1,
         backgroundColor: "#33b5e5",
         paddingVertical: 15,
         elevation: 6
@@ -29,5 +29,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: "#FFF",
         textAlign: "center"
-    }
+    },
+
   });

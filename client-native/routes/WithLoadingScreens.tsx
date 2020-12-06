@@ -1,8 +1,9 @@
 import React from "react";
-import { HomeScreen as Home } from "../containers/HomeScreen";
+import { HomeScreen as Home } from "../components/HomeScreen";
 import { WithLoading } from "../components/WithLoading";
 import { LoginScreen as Login } from "../containers/LoginScreen";
 import { LogoutScreen as Logout } from "../components/LogoutScreen";
+
 
 export const HomeScreen = ({ navigation }: any) => (
   <WithLoading Component={Home} navigation={navigation} />
