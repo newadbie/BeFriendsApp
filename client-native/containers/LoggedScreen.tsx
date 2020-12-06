@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HomeScreen, LogoutScreen } from "../routes/WithLoadingScreens";
+import { HomeScreen, LogoutScreen, DebtorsScreen } from "../routes/WithLoadingScreens";
 import Icon from "react-native-ionicons";
 
 const Tab = createBottomTabNavigator();
@@ -21,20 +21,20 @@ export function LoggedScreen() {
           let iconName;
 
           if (route.name === "Strona Glowna") {
-            iconName = focused
-              ? "information-circle"
-              : "information-circle-outline";
-          } else if (route.name === 'Logout') {
-            iconName = focused ? 'list-box' : 'list';
+            iconName = 'home'
+          } else if (route.name === 'Wyloguj') {
+            iconName = 'log-out';
+          } else if (route.name === 'Dłużnicy') {
+            iconName = focused ? 'list-box' : 'list'
           }
-
           return <Icon name={iconName} size={size} color={color} />
         },
       })}
       initialRouteName="Strona Glowna"
     >
       <Tab.Screen component={HomeScreen} name="Strona Glowna" />
-      <Tab.Screen component={LogoutScreen} name="Logout" />
+      <Tab.Screen component={DebtorsScreen} name="Dłużnicy" />
+      <Tab.Screen component={LogoutScreen} name="Wyloguj" />
     </Tab.Navigator>
   );
 }
