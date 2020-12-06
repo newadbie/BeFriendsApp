@@ -23,7 +23,8 @@ class UserService {
 
   static async createNewUser(
     userEmail: string,
-    userPassword: string
+    userPassword: string,
+    name: string
   ): Promise<IUser> {
     userEmail = userEmail.trim();
     userPassword = userPassword.trim();
@@ -37,9 +38,11 @@ class UserService {
     const hashedPassword = await bcrypt.hash(userPassword, 12);
     const newUser = await new User({
       email: userEmail,
+      name: name,
       password: hashedPassword,
       logoutFromAllDevicesKey: logoutKey,
     }).save();
+    console.log(name);
     return newUser;
   }
 }

@@ -11,13 +11,10 @@ import {
   
 export const HomeScreen = ({ navigation } : any) => {
   const isAuthorizated = useSelector(getAuth).isAuthenticated;
+  const userName = useSelector(getAuth).userName
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>{isAuthorizated ? "Jest" : "Nie ma"} alo alo</Text>
-        <Button
-          onPress={() => navigation.navigate('Notifications')}
-          title="Go to notifications"
-        />
+        <Text>{isAuthorizated ? "Jest" : "Nie ma"} Witaj {userName}!</Text>
       </View>
     );
   }

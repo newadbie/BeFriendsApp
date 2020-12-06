@@ -23,6 +23,7 @@ export const Application = () => {
       .post("http://192.168.0.241:8080/checkLogin")
       .then((res) => {
         if (res.data.isLogged) {
+          console.log(res.data)
           dispatch(login(res.data));
         }
       })
@@ -42,18 +43,10 @@ export const Application = () => {
 
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home Screen" openByDefault={true}>
+      <Drawer.Navigator initialRouteName="Home Screen">
         <Drawer.Screen component={HomeScreen} name="Home Screen" />
         <Drawer.Screen component={LogoutScreen} name="Logout" />
       </Drawer.Navigator>
     </NavigationContainer>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

@@ -4,6 +4,7 @@ import Joi, { ErrorReport } from 'joi';
 export interface IUser extends Document {
   email: string;
   password: string;
+  name: string;
   logoutFromAllDevicesKey: string;
 }
 
@@ -19,6 +20,7 @@ export const joiLoginSchema = Joi.object().keys({
 
 export const joiRegisterSchema = Joi.object().keys({
     email: Joi.string().email().normalize().trim().required(),
+    name: Joi.string().trim().required(),
     password: Joi.string().normalize().trim().required()
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#<>()\$%\^&\*])(?=.{8,}).*/)
     .message("Password is too weak!"),
@@ -46,6 +48,10 @@ export const userSchema: Schema = new Schema({
   password: {
     type: String,
     required: true,
+  },
+  name: {
+    type: String,
+    required: true
   },
   logoutFromAllDevicesKey: {
     type: String,

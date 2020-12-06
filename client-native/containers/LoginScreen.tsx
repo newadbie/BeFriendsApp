@@ -28,7 +28,7 @@ export const LoginScreen: React.FC<SpinerChildrenState> = ({setLoadingState, nav
         email: email,
         password: password,
       })
-      .then((e) => {
+      .then(() => {
         dispatch(login(email));
       })
       .catch((err) => {

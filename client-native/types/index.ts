@@ -1,5 +1,5 @@
 export interface AuthState {
-    // currentUser: object,
+    userName: string,
     userEmail: string,
     isAuthenticated: boolean,
 }

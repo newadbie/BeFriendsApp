@@ -25,9 +25,10 @@ class Authorization {
     next: express.NextFunction
   ) => {
     if (res.locals.user) {
+      console.log(res.locals.user);
       return res
         .status(200)
-        .json({ isLogged: true, userEmail: res.locals.user.email });
+        .json({ isLogged: true, userEmail: res.locals.user.email, userName: res.locals.user.name });
     } else {
       return res
         .status(200)
@@ -51,13 +52,13 @@ class Authorization {
       return res.status(422).json({ message: error.message });
     }
 
-    const { email, password, confirmPassword } = req.body;
+    const { email, name, password, confirmPassword } = req.body;
     if (password !== confirmPassword) {
       return res.status(422).json({ message: "Passwords does not matches!" });
     }
 
     try {
-      await UserService.createNewUser(email, password);
+      await UserService.createNewUser(email, password, name);
     } catch (err) {
       res.status(422).json({ message: err.message });
     }
@@ -109,8 +110,6 @@ class Authorization {
       .status(200)
       .json({ message: "You have signed out!" });
   };
-
-
 
   public getRouter() {
     return this.router;
