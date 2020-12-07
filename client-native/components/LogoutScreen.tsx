@@ -14,11 +14,9 @@ export const LogoutScreen: React.FC<SpinerChildrenState> = ({
     axios
       .post("http://192.168.0.241:8080/logout", {}, { withCredentials: true })
       .then(() => {
-        setLoadingState(false);
         dispatch(logout());
       })
       .catch((err) => {
-        setLoadingState(false);
         console.log(err);
       });
   });
