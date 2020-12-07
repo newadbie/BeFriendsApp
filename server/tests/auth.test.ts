@@ -245,8 +245,4 @@ describe("Authorization", () => {
         .catch((err) => done(err));
     });
   });
-
-  after(async (done) => {
-    done();
-  });
 });
