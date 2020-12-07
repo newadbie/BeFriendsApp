@@ -50,7 +50,7 @@ class Authorization {
 
     try {
       await joiRegisterSchema.validateAsync(req.body);
-      const { email, name, password} = req.body;
+      const { email, name, password } = req.body;
       await UserService.createNewUser(email, password, name);
       return res.status(200).json({ message: "Yaa, everything is correct!" });
     } catch (err) {
@@ -68,14 +68,11 @@ class Authorization {
         .status(401)
         .json({ message: "Logged user cannot log in again!" });
     }
-
-    const { error } = joiLoginSchema.validate(req.body);
-    if (error) {
-      return res.status(422).json(error.message);
-    }
-    const { email, password } = req.body;
-
     try {
+      await joiLoginSchema.validateAsync(req.body);
+
+      const { email, password } = req.body;
+
       const loggedUser = await UserService.signInUser(email, password);
       const jwtToken = TokenService.generateJwtToken(loggedUser);
 
