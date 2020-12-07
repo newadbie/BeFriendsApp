@@ -22,7 +22,7 @@ describe("Authorization", () => {
           email: "UserTestNotExist@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOO',
-          name: "Adrian"
+          name: "Adrian",
         })
         .end((err, res) => {
           if (err) {
@@ -41,14 +41,14 @@ describe("Authorization", () => {
           email: "user2@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOQ',
-          name: "Adrian"
+          name: "Adrian",
         })
         .end((err, res) => {
           if (err) {
             done(err);
           }
           expect(res).to.have.status(422);
-          expect(res.body.message).to.deep.equal("Password does not matches");
+          expect(res.body).to.deep.equal("Password does not matches");
 
           done();
         });
@@ -62,16 +62,16 @@ describe("Authorization", () => {
           email: "UserTestNotExist@wp.pl",
           password: "[&vKFw[vHD%N2y=w!",
           confirmPassword: "[&vKFw[vHD%N2y=w!",
-          name: "Adrian"
+          name: "Adrian",
         })
         .end((err, res) => {
           if (err) {
             done(err);
           }
-          expect(res.body.message).to.have.equal(
+          expect(res).to.have.status(422);
+          expect(res.body).to.have.equal(
             "This email is already in use!"
           );
-          expect(res).to.have.status(422);
           done();
         });
     });
@@ -84,16 +84,34 @@ describe("Authorization", () => {
           email: "UserTestNotExist@wp.pl",
           password: "",
           confirmPassword: "",
-          name: "Adrian"
+          name: "Adrian",
         })
         .end((err, res) => {
           if (err) {
             done(err);
           }
           expect(res).to.have.status(422);
-          expect(res.body.message).to.have.equal(
+          expect(res.body).to.have.equal(
             '"password" is not allowed to be empty'
           );
+          done();
+        });
+    });
+
+    it("Incorrect, name is required!", (done) => {
+      request(app)
+        .post("/register")
+        .send({
+          email: "randomuser@wp.pl",
+          password: strongPasswords[0],
+          confirmPassword: strongPasswords[0],
+        })
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res).status(422);
+          expect(res.body).to.be.equal('"name" is required');
           done();
         });
     });
@@ -107,14 +125,14 @@ describe("Authorization", () => {
             email: "weakUser" + index + "@wp.pl",
             password: password,
             confirmPassword: password,
-            name: "Adrian"
+            name: "Adrian",
           })
           .end((err, res) => {
             if (err) {
               done(err);
             }
             expect(res).to.have.status(422);
-            expect(res.body.message).to.have.equal("Password is too weak!");
+            expect(res.body).to.have.equal("Password is too weak!");
             done();
           });
       });
@@ -128,7 +146,7 @@ describe("Authorization", () => {
             email: "strongUser" + index + "@wp.pl",
             password: password,
             confirmPassword: password,
-            name: "Adrian"
+            name: "Adrian",
           })
           .then((res) => {
             expect(res).to.have.status(200);
@@ -147,14 +165,14 @@ describe("Authorization", () => {
           email: "Incorrect.pl",
           password: strongPasswords[0],
           confirmPassword: strongPasswords[0],
-          name: "Adrian"
+          name: "Adrian",
         })
         .end((err, res) => {
           if (err) {
             done(err);
           }
           expect(res).to.have.status(422);
-          expect(res.body.message).to.have.deep.equal(
+          expect(res.body).to.have.deep.equal(
             '"email" must be a valid email'
           );
           done();
