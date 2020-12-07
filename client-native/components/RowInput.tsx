@@ -3,9 +3,10 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 
 export type RowInputProps = {
   text: string;
-  value: string;
-  changeValueAction(e: string): void;
+  value: any;
+  changeValueAction(e: any): void;
   secureTextEntry?: boolean;
+  maxLength?: number,
   keyboardType?: 'default' | 'number-pad' | 'decimal-pad' | 'numeric' | 'email-address' | 'phone-pad'
 };
 
@@ -13,6 +14,7 @@ export const RowInput: React.FC<RowInputProps> = ({
   text,
   value,
   keyboardType,
+  maxLength,
   changeValueAction,
   secureTextEntry,
 }) => {
@@ -23,6 +25,7 @@ export const RowInput: React.FC<RowInputProps> = ({
         style={styles.input}
         value={value}
         keyboardType={keyboardType}
+        maxLength={maxLength}
         onChangeText={changeValueAction}
         secureTextEntry={secureTextEntry}
       />

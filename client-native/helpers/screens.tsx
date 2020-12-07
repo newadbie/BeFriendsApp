@@ -6,5 +6,5 @@ export const authScreens = {
 }
 
 export const userScreens = {
-    'Strona glowna': LoggedScreen,
+    'Panel Użytkownika': LoggedScreen,
 }

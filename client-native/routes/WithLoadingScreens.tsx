@@ -3,7 +3,8 @@ import { HomeScreen as Home } from "../components/HomeScreen";
 import { WithLoading } from "../components/WithLoading";
 import { LoginScreen as Login } from "../containers/LoginScreen";
 import { LogoutScreen as Logout } from "../components/LogoutScreen";
-import { DebtorsScreen as Debtors} from '../containers/DebtorsScreen';
+import { DebtorsScreen as Debtors } from "../containers/DebtorsScreen";
+import { GiveCreditScreen as GiveCredit } from "../containers/GiveCreditScreen";
 
 export const HomeScreen = ({ navigation }: any) => (
   <WithLoading Component={Home} navigation={navigation} />
@@ -17,6 +18,10 @@ export const LogoutScreen = ({ navigation }: any) => (
   <WithLoading Component={Logout} navigation={navigation} />
 );
 
-export const DebtorsScreen = ({navigation} : any) => (
+export const DebtorsScreen = ({ navigation }: any) => (
   <WithLoading Component={Debtors} navigation={navigation} />
-)
+);
+
+export const GiveCreditScreen = ({ navigation }: any) => (
+  <WithLoading Component={GiveCredit} navigation={navigation} />
+);
