@@ -33,15 +33,23 @@ class LoanSystem {
     if (!res.locals.user) {
       return res.status(401).json("You are not logged!");
     }
-    const debtorData: IDebtor = req.body.debtor;
-    const debtor : IDebtor = await LoanService.getDebtor(debtorData);
+    try {
+      const debtorData: IDebtor = req.body.debtor;
+      if (!req.body.creditValue || req.body.creditValue <= 0) {
+        return res.status(422).json("Incorrect credit value!");
+      }
 
-    if(!req.body.creditValue || req.body.creditValue <= 0) {
-      return res.status(422).json("Incorrect credit value!");
+      const debtor: IDebtor = await LoanService.getDebtor(debtorData);
+      await LoanService.giveACredit(
+        res.locals.user,
+        debtor,
+        req.body.creditValue
+      );
+    } catch (err) {
+      return res.status(422).json(err);
     }
 
-    await LoanService.giveACredit(res.locals.user, debtor, req.body.creditValue);
-    return res.status(200).json({message: "Everything is correct!"});
+    return res.status(200).json({ message: "Everything is correct!" });
   }
 
   public getRouter() {

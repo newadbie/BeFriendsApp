@@ -7,6 +7,11 @@ class LoanService {
     const debtor: IDebtor | null = await Debtor.findOne({
       phoneNumber: debtorData.phoneNumber,
     });
+
+    if (debtor?.name !== debtorData.name) {
+      throw new Error("This phone number is in use for another person");
+    }
+
     if (debtor) {
       return debtor;
     }

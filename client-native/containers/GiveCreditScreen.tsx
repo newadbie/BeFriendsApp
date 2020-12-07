@@ -1,31 +1,55 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text, Alert } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { RowInput } from "../components/RowInput";
-import {Button } from '../components/Button';
+import { SpinerChildrenState } from "../components/WithLoading";
+import { Button } from "../components/Button";
+import axios from "axios";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 
-export const GiveCreditScreen: React.FC = () => {
-  const [phoneNumber, setPhoneNumber] = useState(0);
+export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
+  setLoadingState,
+  isLoading,
+}) => {
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [debtorName, setDebtorName] = useState("");
-  const [creditValue, setCreditValue] = useState(0);
+  const [creditValue, setCreditValue] = useState("");
 
-  const setPhoneNumberHandler = (value: string) => {
-    setPhoneNumber(+value);
+  const giveACredit = () => {
+    setLoadingState(true);
+    const debtor = {
+      phoneNumber: +phoneNumber,
+      name: debtorName,
+    };
+
+    axios
+      .put("http://192.168.0.241:8080/giveCredit", {
+        debtor: debtor,
+        creditValue: +creditValue,
+      }, {withCredentials: true})
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setLoadingState(false));
   };
-  const setCreditValueHandler = (value: string) => {
-    setCreditValue(+value);
-  };
+
+  if (isLoading) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Dodaj dłużnika!</Text>
       <RowInput
         text="Telefon dłużnika"
         value={phoneNumber}
-        changeValueAction={setPhoneNumberHandler}
+        changeValueAction={setPhoneNumber}
         keyboardType="phone-pad"
         maxLength={9}
       />
@@ -37,10 +61,10 @@ export const GiveCreditScreen: React.FC = () => {
       <RowInput
         text="Wartość kredytu"
         value={creditValue}
-        changeValueAction={setCreditValueHandler}
+        changeValueAction={setCreditValue}
         keyboardType="numeric"
       />
-      <Button title="Pożycz hajsiwko" onPress={() => Alert.alert("Pożyczono")}/>
+      <Button title="Pożycz hajsiwko" onPress={giveACredit} />
     </View>
   );
 };

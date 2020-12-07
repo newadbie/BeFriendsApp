@@ -25,7 +25,6 @@ class Authorization {
     next: express.NextFunction
   ) => {
     if (res.locals.user) {
-      console.log(res.locals.user);
       return res
         .status(200)
         .json({
