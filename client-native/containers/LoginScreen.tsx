@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import { login } from "../slices/authSlice";
-import { LoginInput } from "../components/LoginInput";
+import { RowInput } from "../components/RowInput";
 import { Error } from "../components/Error";
 import { Button } from "../components/Button";
 
@@ -44,14 +44,19 @@ export const LoginScreen: React.FC<SpinerChildrenState> = ({
   };
 
   if (isLoading) {
-    return null
+    return null;
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Zaloguj się!</Text>
-      <LoginInput text="Email" value={email} changeValueAction={setEmail} />
-      <LoginInput
+      <RowInput
+        text="Email"
+        value={email}
+        changeValueAction={setEmail}
+        keyboardType="email-address"
+      />
+      <RowInput
         text="Hasło"
         value={password}
         changeValueAction={setPassword}
