@@ -31,7 +31,9 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
         creditValue: +creditValue,
       }, {withCredentials: true})
       .then((res) => {
-        console.log(res);
+          setPhoneNumber("");
+          setDebtorName("");
+          setCreditValue("");
       })
       .catch((err) => {
         console.log(err);

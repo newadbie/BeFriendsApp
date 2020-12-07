@@ -46,6 +46,7 @@ class LoanSystem {
         req.body.creditValue
       );
     } catch (err) {
+      console.log(err);
       return res.status(422).json(err);
     }
 

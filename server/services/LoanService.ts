@@ -1,6 +1,7 @@
 import Debtor, { IDebtor } from "../models/debtor";
 import Credit from "../models/cretdit";
 import { IUser } from "../models/user";
+import { SmsService } from "./SmsService";
 
 class LoanService {
   static async getDebtor(debtorData: IDebtor): Promise<IDebtor> {
@@ -8,7 +9,7 @@ class LoanService {
       phoneNumber: debtorData.phoneNumber,
     });
 
-    if (debtor?.name !== debtorData.name) {
+    if (debtor && debtor?.name !== debtorData.name) {
       throw new Error("This phone number is in use for another person");
     }
 
@@ -31,6 +32,15 @@ class LoanService {
       creditValue: creditValue,
       isPaidOff: false,
     }).save();
+
+    const message: string =
+      "Siemka " +
+      debtor.name +
+      " właśnie Adrian pożyczył Ci " +
+      creditValue +
+      "zł, będę Ci o tym przypominał co jakiś czas, by Ci to z głowy nie wyleciało!";
+
+    SmsService.sendSms(debtor.phoneNumber, message);
   }
 }
 
