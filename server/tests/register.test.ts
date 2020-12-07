@@ -2,22 +2,17 @@ import chai from "chai";
 import chaiHttp from "chai-http";
 import request from "supertest";
 import { weakPasswords, strongPasswords } from "./data";
-import { MongoMemoryServer } from "mongodb-memory-server";
+
 const expect = chai.expect;
 process.env.NODE_ENV = "test";
 chai.use(chaiHttp);
 
 import server from "../server";
-import { mongo } from "mongoose";
 /// TODO DEVELOP!!!
 
 const app = server.app;
 
-describe("AUTH", () => {
-  before((done) => {
-    
-    done();
-  });
+describe("Authorization", () => {
   describe("#POST /register", () => {
     it("Correct!, User has been created successfully!", (done) => {
       chai
@@ -27,6 +22,7 @@ describe("AUTH", () => {
           email: "UserTestNotExist@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOO',
+          name: "Adrian"
         })
         .end((err, res) => {
           if (err) {
@@ -45,6 +41,7 @@ describe("AUTH", () => {
           email: "user2@wp.pl",
           password: 'bYuZ1"fiHeip@AOO',
           confirmPassword: 'bYuZ1"fiHeip@AOQ',
+          name: "Adrian"
         })
         .end((err, res) => {
           if (err) {
@@ -65,6 +62,7 @@ describe("AUTH", () => {
           email: "UserTestNotExist@wp.pl",
           password: "[&vKFw[vHD%N2y=w!",
           confirmPassword: "[&vKFw[vHD%N2y=w!",
+          name: "Adrian"
         })
         .end((err, res) => {
           if (err) {
@@ -86,6 +84,7 @@ describe("AUTH", () => {
           email: "UserTestNotExist@wp.pl",
           password: "",
           confirmPassword: "",
+          name: "Adrian"
         })
         .end((err, res) => {
           if (err) {
@@ -108,6 +107,7 @@ describe("AUTH", () => {
             email: "weakUser" + index + "@wp.pl",
             password: password,
             confirmPassword: password,
+            name: "Adrian"
           })
           .end((err, res) => {
             if (err) {
@@ -128,6 +128,7 @@ describe("AUTH", () => {
             email: "strongUser" + index + "@wp.pl",
             password: password,
             confirmPassword: password,
+            name: "Adrian"
           })
           .then((res) => {
             expect(res).to.have.status(200);
@@ -146,6 +147,7 @@ describe("AUTH", () => {
           email: "Incorrect.pl",
           password: strongPasswords[0],
           confirmPassword: strongPasswords[0],
+          name: "Adrian"
         })
         .end((err, res) => {
           if (err) {
@@ -174,7 +176,7 @@ describe("AUTH", () => {
             if (err) {
               done(err);
             }
-            expect(res.body.message).to.deep.equal("Email is not registered");
+            expect(res.body).to.be.equal("Email or password is incorrect");
             expect(res).to.have.status(401);
             done();
           });
