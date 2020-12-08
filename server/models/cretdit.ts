@@ -1,14 +1,17 @@
-import { number } from "joi";
 import { ObjectID } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
-import { IDebtor } from "./debtor";
-import { IUser } from "./user";
+import Joi, { ErrorReport } from 'joi';
+
+enum paidStatus {
+    paid = "paid",
+    unpaid = "unpaid"
+}
 
 export interface ICredit extends Document {
   debtor: ObjectID;
   user: ObjectID;
   creditValue: number;
-  isPaidOff: boolean;
+  isPaidOff: paidStatus;
 }
 
 const creditSchema : Schema<ICredit> = new Schema({
@@ -27,7 +30,9 @@ const creditSchema : Schema<ICredit> = new Schema({
         required: true,
     },
     isPaidOff: {
-        type: Boolean,
+        type: String,
+        enum: ['paid', 'unpaid'],
+        default: 'unpaid',
         required: true
     }
 })

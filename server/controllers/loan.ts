@@ -11,7 +11,12 @@ class LoanSystem {
     this.initialzeRouter();
   }
 
-  getDebtors(
+  private initialzeRouter() {
+    this.router.get("/getAllGivenCredits", isLogged, this.getCredits);
+    this.router.put("/giveCredit", isLogged, this.giveACredit);
+  }
+
+  async getCredits(
     req: express.Request,
     res: express.Response,
     next: express.NextFunction
@@ -19,10 +24,9 @@ class LoanSystem {
     if (!res.locals.user) {
       return res.status(401).json("You are not logged");
     }
-  }
-  private initialzeRouter() {
-    this.router.get("/getDebtors", isLogged, this.getDebtors);
-    this.router.put("/giveCredit", isLogged, this.giveACredit);
+    const data = await LoanService.getCountedDebtorCredits(res.locals.user);
+    console.log(data)
+    return res.status(200).json(data);
   }
 
   async giveACredit(
@@ -35,6 +39,7 @@ class LoanSystem {
     }
     try {
       const debtorData: IDebtor = req.body.debtor;
+
       if (!req.body.creditValue || req.body.creditValue <= 0) {
         return res.status(422).json("Incorrect credit value!");
       }
@@ -46,7 +51,6 @@ class LoanSystem {
         req.body.creditValue
       );
     } catch (err) {
-      console.log(err);
       return res.status(422).json(err);
     }
 

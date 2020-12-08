@@ -1,9 +1,49 @@
+import express from "express";
 import Debtor, { IDebtor } from "../models/debtor";
-import Credit from "../models/cretdit";
+import Credit, { ICredit } from "../models/cretdit";
 import { IUser } from "../models/user";
 import { SmsService } from "./SmsService";
 
 class LoanService {
+  static getCountedDebtorCredits(currentUser: IUser) {
+    return Credit.aggregate([
+      {
+        $match: { user: currentUser._id },
+      },
+      {
+        $group: {
+          _id: "$debtor",
+          totalCredit: { $sum: "$creditValue" },
+          numberOfCredits: { $sum: 1 },
+        },
+      },
+      {
+        $lookup: {
+          from: "debtors",
+          localField: "_id",
+          foreignField: "_id",
+          as: "debtor",
+        },
+      },
+      {
+        $unwind: "$debtor",
+      },
+      {
+        $project: {
+          _id: null,
+          debtorName: "$debtor.name",
+          debtorPhoneNumber: "$debtor.phoneNumber",
+          totalCredit: "$totalCredit",
+          takenCredits: "$numberOfCredits",
+        },
+      },
+    ]).sort({debtorName: 1}).then(res => {
+      return res;
+    }).catch(err => {
+      Promise.reject(err);
+    });
+  }
+
   static async getDebtor(debtorData: IDebtor): Promise<IDebtor> {
     const debtor: IDebtor | null = await Debtor.findOne({
       phoneNumber: debtorData.phoneNumber,
@@ -30,7 +70,7 @@ class LoanService {
       user: user,
       debtor: debtor,
       creditValue: creditValue,
-      isPaidOff: false,
+      isPaidOff: "unpaid",
     }).save();
 
     const message: string =

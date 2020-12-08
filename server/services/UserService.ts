@@ -42,7 +42,6 @@ class UserService {
       password: hashedPassword,
       logoutFromAllDevicesKey: logoutKey,
     }).save();
-    console.log(name);
     return newUser;
   }
 }
