@@ -14,23 +14,25 @@ const Stack = createStackNavigator();
 
 export const Application = () => {
   const [isLoaded, setLoaded] = useState(false);
-  const isLogged= useSelector(getAuth).isAuthenticated;
+  const isLogged = useSelector(getAuth).isAuthenticated;
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    axios
-      .post("http://192.168.0.241:8080/checkLogin")
-      .then((res) => {
-        if (res.data.isLogged) {
-          dispatch(login(res.data));
-        }
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        setLoaded(true);
-      });
+  const checkLogin = async () => {
+    try {
+      const res = await axios.post("http://192.168.0.241:8080/checkLogin")
+      console.log(res.data.isLogged)
+      if (res.data.isLogged) {
+        dispatch(login(res.data));
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+    setLoaded(true);
+  }
 
-    return () => setLoaded(false);
+  useEffect(() => {
+    checkLogin();
   }, []);
 
   if (!isLoaded) {
