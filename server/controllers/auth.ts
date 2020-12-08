@@ -25,10 +25,11 @@ class Authorization {
     next: express.NextFunction
   ) => {
     if (res.locals.user) {
-      console.log(res.locals.user);
-      return res
-        .status(200)
-        .json({ isLogged: true, userEmail: res.locals.user.email, userName: res.locals.user.name });
+      return res.status(200).json({
+        isLogged: true,
+        userEmail: res.locals.user.email,
+        userName: res.locals.user.name,
+      });
     } else {
       return res
         .status(200)
@@ -47,22 +48,14 @@ class Authorization {
         .json({ message: "You cannot register, if you are logged in!" });
     }
 
-    const { error } = joiRegisterSchema.validate(req.body);
-    if (error) {
-      return res.status(422).json({ message: error.message });
-    }
-
-    const { email, name, password, confirmPassword } = req.body;
-    if (password !== confirmPassword) {
-      return res.status(422).json({ message: "Passwords does not matches!" });
-    }
-
     try {
+      await joiRegisterSchema.validateAsync(req.body);
+      const { email, name, password } = req.body;
       await UserService.createNewUser(email, password, name);
+      return res.status(200).json({ message: "Yaa, everything is correct!" });
     } catch (err) {
-      res.status(422).json({ message: err.message });
+      res.status(422).json(err.message);
     }
-    return res.status(200).json({ message: "Yaa, everything is correct!" });
   };
 
   signIn = async (
@@ -75,14 +68,11 @@ class Authorization {
         .status(401)
         .json({ message: "Logged user cannot log in again!" });
     }
-
-    const { error } = joiLoginSchema.validate(req.body);
-    if (error) {
-      return res.status(422).json(error.message);
-    }
-    const { email, password } = req.body;
-
     try {
+      await joiLoginSchema.validateAsync(req.body);
+
+      const { email, password } = req.body;
+
       const loggedUser = await UserService.signInUser(email, password);
       const jwtToken = TokenService.generateJwtToken(loggedUser);
 
@@ -111,7 +101,7 @@ class Authorization {
       .json({ message: "You have signed out!" });
   };
 
-  public getRouter() {
+  public getRouter(): express.Router {
     return this.router;
   }
 }

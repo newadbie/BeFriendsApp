@@ -12,7 +12,8 @@ export const Spinner: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     position:'absolute',
-    zIndex:1000000,
+    zIndex:100,
+    overlayColor: 'rgba(255,255,255,1',
     backgroundColor: 'rgba(255,255,255,1)',
     top:0,
     bottom:0,

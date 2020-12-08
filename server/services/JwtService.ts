@@ -8,7 +8,7 @@ class TokenService {
       { userId: user._id, logoutKey: user.logoutFromAllDevicesKey },
       jwtSecret,
       {
-        expiresIn: 60 * 60,
+        expiresIn: 60 * 60 * 60,
       }
     );
 

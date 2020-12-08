@@ -40,7 +40,7 @@ export const joiRegisterSchema = Joi.object().keys({
       }),
   });
 
-export const userSchema: Schema = new Schema({
+export const userSchema: Schema<IUser> = new Schema({
   email: {
     type: String,
     required: true,

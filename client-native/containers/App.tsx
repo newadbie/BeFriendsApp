@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../slices/authSlice";
-import { LoginScreen } from "../routes/WithLoadingScreens";
 import { Spinner } from "../components/Spinner";
 
-import { getAuth } from "../selectors/";
-import { HomeScreen, LogoutScreen } from "../routes/WithLoadingScreens";
-import { NavigationContainer } from "@react-navigation/native";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import { getAuth } from '../selectors'
 
-const Drawer = createDrawerNavigator();
+import { authScreens, userScreens } from "../helpers/screens";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
+const Stack = createStackNavigator();
 
 export const Application = () => {
-  const isAuthenticated = useSelector(getAuth).isAuthenticated;
   const [isLoaded, setLoaded] = useState(false);
+  const isLogged= useSelector(getAuth).isAuthenticated;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +22,6 @@ export const Application = () => {
       .post("http://192.168.0.241:8080/checkLogin")
       .then((res) => {
         if (res.data.isLogged) {
-          console.log(res.data)
           dispatch(login(res.data));
         }
       })
@@ -31,22 +29,23 @@ export const Application = () => {
       .finally(() => {
         setLoaded(true);
       });
+
+    return () => setLoaded(false);
   }, []);
 
   if (!isLoaded) {
     return <Spinner />;
   }
 
-  if (!isAuthenticated) {
-    return <LoginScreen />;
-  }
-
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home Screen">
-        <Drawer.Screen component={HomeScreen} name="Home Screen" />
-        <Drawer.Screen component={LogoutScreen} name="Logout" />
-      </Drawer.Navigator>
+      <Stack.Navigator>
+        {Object.entries({
+          ...(isLogged ? userScreens : authScreens),
+        }).map(([name, component]) => (
+          <Stack.Screen name={name} component={component} key={name}/>
+        ))}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
