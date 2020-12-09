@@ -7,7 +7,7 @@ import { SmsService } from "./SmsService";
 class LoanService {
   static getCountedDebtorCredits(currentUser: IUser, payStatus?: string) {
     let match;
-    if (!payStatus || payStatus === "any") {
+    if (!payStatus || payStatus === "all") {
       match = { user: currentUser._id };
     } else {
       match = {user: currentUser._id, isPaidOff: payStatus}

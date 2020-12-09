@@ -12,11 +12,24 @@ export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
 }) => {
   const filterTypes = {
     all: "Wszystkie",
-    paided: "Nie spłacone długi",
-    unPaided: "Spłacone długi",
+    paid: "Nie spłacone długi",
+    unPaid: "Spłacone długi",
   };
 
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState("all");
+  const fetchData = async () => {
+    try {
+      console.log(filterType)
+      const result = await axios.get("http://192.168.0.241:8080/getAllGivenCredits?payStatus=" + filterType);
+      console.log(result.data)
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => {
+    fetchData();
+  }, [filterType])
 
   if (isLoading) {
     return null;
@@ -33,11 +46,11 @@ export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
           position: "relative",
         }}
       >
-        <Text style={{ width: widthPercentageToDP("50%"), textAlign: 'right', fontWeight: 'bold' }}>Filtruj:</Text>
+        <Text style={{ width: widthPercentageToDP("30%"), textAlign: 'right', fontWeight: 'bold' }}>Filtruj:</Text>
         <Picker
           selectedValue={filterType}
           onValueChange={(itemValue: any) => setFilterType(itemValue)}
-          style={{ width: widthPercentageToDP("50%") }}
+          style={{ width: widthPercentageToDP("70%")}}
         >
           {Object.entries(filterTypes).map((item, key) => {
             return <Picker.Item label={item[1]} value={item[0]} key={key} />;

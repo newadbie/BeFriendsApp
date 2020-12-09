@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import Joi, { ErrorReport, number } from 'joi';
+import Joi from 'joi';
 
 export interface IDebtor extends Document {
   phoneNumber: number;
@@ -16,5 +16,10 @@ const debtorSchema : Schema<IDebtor> = new Schema({
         required: true
     }
 });
+
+export const joiDebtorSchema = Joi.object().keys({
+    phoneNumber: Joi.number().integer().required().min(8).max(9),
+    name: Joi.string().required().min(5)
+})
 
 export default mongoose.model<IDebtor>('Debtor', debtorSchema);
