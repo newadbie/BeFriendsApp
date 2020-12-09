@@ -5,10 +5,16 @@ import { IUser } from "../models/user";
 import { SmsService } from "./SmsService";
 
 class LoanService {
-  static getCountedDebtorCredits(currentUser: IUser) {
+  static getCountedDebtorCredits(currentUser: IUser, payStatus?: string) {
+    let match;
+    if (!payStatus || payStatus === "any") {
+      match = { user: currentUser._id };
+    } else {
+      match = {user: currentUser._id, isPaidOff: payStatus}
+    }
     return Credit.aggregate([
       {
-        $match: { user: currentUser._id },
+        $match: match
       },
       {
         $group: {
@@ -37,11 +43,14 @@ class LoanService {
           takenCredits: "$numberOfCredits",
         },
       },
-    ]).sort({debtorName: 1}).then(res => {
-      return res;
-    }).catch(err => {
-      Promise.reject(err);
-    });
+    ])
+      .sort({ debtorName: 1 })
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        Promise.reject(err);
+      });
   }
 
   static async getDebtor(debtorData: IDebtor): Promise<IDebtor> {

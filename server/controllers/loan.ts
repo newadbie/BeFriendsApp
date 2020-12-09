@@ -2,6 +2,7 @@ import express from "express";
 import isLogged from "../middlewares/isLogged";
 import { IDebtor } from "../models/debtor";
 import LoanService from "../services/LoanService";
+import { joiPayFilter } from "../utils/queryValidate";
 
 class LoanSystem {
   private readonly router: express.Router;
@@ -12,7 +13,11 @@ class LoanSystem {
   }
 
   private initialzeRouter() {
-    this.router.get("/getAllGivenCredits", isLogged, this.getCredits);
+    this.router.get(
+      "/getAllGivenCredits/:payStatus?",
+      isLogged,
+      this.getCredits
+    );
     this.router.put("/giveCredit", isLogged, this.giveACredit);
   }
 
@@ -24,9 +29,13 @@ class LoanSystem {
     if (!res.locals.user) {
       return res.status(401).json("You are not logged");
     }
-    const data = await LoanService.getCountedDebtorCredits(res.locals.user);
-    console.log(data)
-    return res.status(200).json(data);
+    try {
+      const { payStatus } = req.query.payStatus !== null ? await joiPayFilter.validateAsync(req.query) : null;
+      const data = await LoanService.getCountedDebtorCredits(res.locals.user, payStatus);
+      return res.status(200).json(data);
+    } catch (err) {
+      return res.status(401).json(err);
+    }
   }
 
   async giveACredit(

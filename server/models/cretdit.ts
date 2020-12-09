@@ -1,6 +1,5 @@
 import { ObjectID } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
-import Joi, { ErrorReport } from 'joi';
 
 enum paidStatus {
     paid = "paid",

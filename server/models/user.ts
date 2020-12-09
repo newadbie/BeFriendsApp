@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import Joi, { ErrorReport } from 'joi';
+import Joi from 'joi';
 
 export interface IUser extends Document {
   email: string;
