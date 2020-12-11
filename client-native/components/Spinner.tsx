@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
   container: {
     position:'absolute',
     zIndex:100,
-    overlayColor: 'rgba(255,255,255,1',
-    backgroundColor: 'rgba(255,255,255,1)',
+    overlayColor: 'rgba(255,255,255,1)',
+    backgroundColor: 'rgba(255,255,255,.6)',
     top:0,
     bottom:0,
     left:0,

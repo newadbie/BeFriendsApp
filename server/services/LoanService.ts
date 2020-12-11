@@ -1,6 +1,5 @@
-import express from "express";
 import Debtor, { IDebtor } from "../models/debtor";
-import Credit, { ICredit } from "../models/cretdit";
+import Credit from "../models/cretdit";
 import { IUser } from "../models/user";
 import { SmsService } from "./SmsService";
 
@@ -37,8 +36,8 @@ class LoanService {
       {
         $project: {
           _id: null,
-          debtorName: "$debtor.name",
-          debtorPhoneNumber: "$debtor.phoneNumber",
+          name: "$debtor.name",
+          phoneNumber: "$debtor.phoneNumber",
           totalCredit: "$totalCredit",
           takenCredits: "$numberOfCredits",
         },
