@@ -41,8 +41,10 @@ class LoanService {
           takenCredits: "$numberOfCredits",
         },
       },
+      {
+        $sort: { name : 1}
+      }
     ])
-      .sort({ debtorName: 1 })
       .then((res) => {
         return res;
       })
