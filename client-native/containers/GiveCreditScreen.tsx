@@ -3,17 +3,20 @@ import { View, StyleSheet, Text } from "react-native";
 import { RowInput } from "../components/RowInput";
 import { SpinerChildrenState } from "../components/WithLoading";
 import { Button } from "../components/Button";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { fetchDebtors } from "../slices/debtorsSlice";
 
 export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
   setLoadingState,
   isLoading,
 }) => {
+  const dispatch = useDispatch();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [debtorName, setDebtorName] = useState("");
   const [creditValue, setCreditValue] = useState("");
@@ -26,14 +29,19 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
     };
 
     axios
-      .put("http://192.168.0.241:8080/giveCredit", {
-        debtor: debtor,
-        creditValue: +creditValue,
-      }, {withCredentials: true})
+      .put(
+        "http://192.168.0.241:8080/giveCredit",
+        {
+          debtor: debtor,
+          creditValue: +creditValue,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
-          setPhoneNumber("");
-          setDebtorName("");
-          setCreditValue("");
+        setPhoneNumber("");
+        setDebtorName("");
+        setCreditValue("");
+        dispatch(fetchDebtors());
       })
       .catch((err) => {
         console.log(err);
