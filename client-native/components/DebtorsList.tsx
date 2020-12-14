@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { View, StyleSheet } from "react-native";
+import { StyleSheet, FlatList} from "react-native";
 import { debtorData, DebtorItem } from "./DebtorItem";
 import { widthPercentageToDP } from "react-native-responsive-screen";
 
@@ -8,16 +8,24 @@ export interface DebtorsListProps {
 }
 
 export const DebtorsList: FC<DebtorsListProps> = ({ debtors }) => {
-  const debtorList = debtors.map((obj: any, index) => {
-      return <DebtorItem debtor={obj} key={index}/>;
-  });
-  return <View style={styles.container}>{debtorList}</View>;
+  const renderItem = ({ item }: { item: debtorData }) => {
+    return <DebtorItem debtor={item} />;
+  };
+  return (
+    <FlatList
+    style={styles.container}
+      keyExtractor={(item, index) => index.toString()}
+      renderItem={renderItem}
+      data={debtors}
+    />
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        width: widthPercentageToDP("75%"),
-        marginLeft: widthPercentageToDP("12.5%"),
-        marginTop: 10
-    }
-})
+  container: {
+    width: widthPercentageToDP("75%"),
+    marginLeft: widthPercentageToDP("12.5%"),
+    marginTop: 10,
+    marginBottom:60
+  },
+});

@@ -35,7 +35,6 @@ class LoanService {
       },
       {
         $project: {
-          _id: null,
           name: "$debtor.name",
           phoneNumber: "$debtor.phoneNumber",
           totalCredit: "$totalCredit",
