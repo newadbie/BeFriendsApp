@@ -1,5 +1,7 @@
 import React, { FC } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { TouchableHighlight,View, Text, StyleSheet } from "react-native";
+import { useDispatch } from "react-redux";
+import { selectDebtor } from "../slices/debtorsSlice";
 
 export type debtorData = {
   _id?: null;
@@ -7,24 +9,29 @@ export type debtorData = {
   phoneNumber: number;
   takenCredits: number;
   totalCredit: number;
-}
+};
 
 export interface DebtorItemProps {
   debtor: debtorData;
 }
 
-export const DebtorItem: FC<DebtorItemProps> = ({debtor}) => {
+export const DebtorItem: FC<DebtorItemProps> = ({ debtor }) => {
+  const dispatch = useDispatch();
+  const selectDebtorHandler = () => {
+    dispatch(selectDebtor(debtor));
+  }
+
+  const phoneNumber = debtor.phoneNumber
+    .toString()
+    .replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, " ");
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.bold}>Imię dłużnika:</Text>
-      <Text>{debtor.name}</Text>
-      <Text style={styles.bold}>Numer telefonu</Text>
-      <Text>{debtor.phoneNumber}</Text>
-      <Text style={styles.bold}>Całkowita ilość pożyczek</Text>
-      <Text>{debtor.takenCredits}</Text>
-      <Text style={styles.bold}>Całkowita wartość pożyczek</Text>
-      <Text>{debtor.totalCredit}</Text>
-    </View>
+    <TouchableHighlight style={styles.container} onPress={selectDebtorHandler}>
+      <>
+      <Text style={styles.name}>{debtor.name}</Text>
+      <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+      </>
+    </TouchableHighlight>
   );
 };
 
@@ -33,9 +40,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   container: {
-    marginTop:10,
-    borderWidth:1,
-    borderColor:"#CCC",
-    padding:5
-  }
+    backgroundColor: "#33b5e5",
+    marginLeft: 30,
+    marginRight: 30,
+    marginTop: 10,
+    elevation: 5,
+    borderRadius: 5,
+    padding: 5,
+  },
+  name: {
+    color: "#FFF",
+    fontSize: 21,
+    textAlign: "center",
+  },
+  phoneNumber: {
+    color: "#CCCCCC",
+    textAlign: "center",
+    fontWeight: "bold",
+  },
 });

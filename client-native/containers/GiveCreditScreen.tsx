@@ -37,7 +37,7 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(() => {
         setPhoneNumber("");
         setDebtorName("");
         setCreditValue("");

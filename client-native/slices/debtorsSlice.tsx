@@ -7,6 +7,7 @@ export const initialState: DebtorState = {
   debtors: [],
   isLoading: false,
   filterType: filterTypes.all,
+  selectedDebtor: null,
 };
 
 const debtorSlice = createSlice({
@@ -25,6 +26,12 @@ const debtorSlice = createSlice({
     loadDebtors: (state, { payload }: PayloadAction<Array<debtorData>>) => {
       state.debtors = payload;
     },
+    selectDebtor: (state, { payload }: PayloadAction<debtorData>) => {
+      state.selectedDebtor = payload;
+    },
+    unSelectDebtor: (state) => {
+      state.selectedDebtor = null;
+    },
   },
 });
 
@@ -33,6 +40,8 @@ export const {
   startLoading,
   stopLoading,
   changeFilterType,
+  selectDebtor,
+  unSelectDebtor
 } = debtorSlice.actions;
 
 export const fetchDebtors = () => async (dispatch: any, getState: any) => {
