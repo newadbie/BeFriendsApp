@@ -1,47 +1,47 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, SafeAreaView } from "react-native";
+
+import { fetchDebtors, changeFilterType } from '../slices/debtorsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { filterTypes } from "../types";
+
 import { SpinerChildrenState } from "../components/WithLoading";
-import axios from "axios";
-import { Picker } from "@react-native-picker/picker";
-import { widthPercentageToDP } from "react-native-responsive-screen";
+import { getDebtors } from '../selectors';
 import { DebtorsList } from "../components/DebtorsList";
-import { debtorData } from "../components/DebtorItem";
+
+import { widthPercentageToDP } from "react-native-responsive-screen";
+import { Picker } from "@react-native-picker/picker";
 
 export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
-  navigation,
   setLoadingState,
-  isLoading,
 }) => {
-  const filterTypes = {
-    all: "Wszystkie",
-    paid: "Spłacone długi",
-    unPaid: "Nie spłacone długi",
-  };
+  const dispatch = useDispatch();
 
-  const [filterType, setFilterType] = useState("all");
-  const [debtors, setDebtorsState] = useState<debtorData[]>([]);
+  const isLoading = useSelector(getDebtors).isLoading;
+  const debtors = useSelector(getDebtors).debtors;
+  const filterType = useSelector(getDebtors).filterType;
 
-  const fetchData = async () => {
-    try {
-      setDebtorsState([]);
-      const {
-        data,
-      } = await axios.get(
-        "http://192.168.0.241:8080/getAllGivenCredits?payStatus=" + filterType,
-        { withCredentials: true }
-      );
-        setDebtorsState(data)
-    } catch (err) {
-      console.log(err);
+  const setFilterType = (newFilterType : filterTypes) => {
+    dispatch(changeFilterType(newFilterType))
+  }
+
+  const filterTypeToPolish = (filterType : filterTypes) : string => {
+    switch (filterType) {
+      case "all": return 'Wszystkie'; 
+      case "paid": return "Zapłacone";
+      case "unPaid": return "Nie zapłacone";
     }
-  };
+    return "all";
+  }
 
   useEffect(() => {
-    setLoadingState(true);
-    fetchData().then(() => {
-      setLoadingState(false);
-    });
+    setLoadingState(isLoading)
+  }, [isLoading])
+
+  useEffect(() => {
+    dispatch(fetchDebtors());
   }, [filterType]);
+
   return (
     <View style={{ flex: 1 }}>
       <View
@@ -68,16 +68,13 @@ export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
           style={{ width: widthPercentageToDP("70%") }}
         >
           {Object.entries(filterTypes).map((item, key) => {
-            return <Picker.Item label={item[1]} value={item[0]} key={key} />;
+            return <Picker.Item label={filterTypeToPolish(item[1])} value={item[0]} key={key} />;
           })}
         </Picker>
-        </View>
-        <SafeAreaView>
-          <ScrollView>
-            <DebtorsList debtors={debtors} />
-          </ScrollView>
-        </SafeAreaView>
-      
+      </View>
+      <SafeAreaView>
+        <DebtorsList debtors={debtors} />
+      </SafeAreaView>
     </View>
   );
 };

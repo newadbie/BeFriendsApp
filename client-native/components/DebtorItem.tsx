@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export interface debtorData {
+export type debtorData = {
   _id?: null;
   name: string;
   phoneNumber: number;
