@@ -20,6 +20,7 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
   const [phoneNumber, setPhoneNumber] = useState("");
   const [debtorName, setDebtorName] = useState("");
   const [creditValue, setCreditValue] = useState("");
+  const [creditName, setCreditName] = useState("");
 
   const giveACredit = () => {
     setLoadingState(true);
@@ -34,6 +35,7 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
         {
           debtor: debtor,
           creditValue: +creditValue,
+          creditName: creditName
         },
         { withCredentials: true }
       )
@@ -56,6 +58,12 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Dodaj dłużnika!</Text>
+      <RowInput
+        text="Tytuł pożyczki"
+        value={creditName}
+        changeValueAction={setCreditName}
+        maxLength={13}
+      />
       <RowInput
         text="Telefon dłużnika"
         value={phoneNumber}
