@@ -1,7 +1,7 @@
 import { ObjectID } from "mongodb";
 import mongoose, { Schema, Document } from "mongoose";
 
-enum paidStatus {
+export enum payStatus {
     paid = "paid",
     unpaid = "unpaid"
 }
@@ -10,7 +10,7 @@ export interface ICredit extends Document {
   debtor: ObjectID;
   user: ObjectID;
   creditValue: number;
-  isPaidOff: paidStatus;
+  isPaidOff: payStatus;
 }
 
 const creditSchema : Schema<ICredit> = new Schema({

@@ -1,5 +1,5 @@
-import Debtor, { IDebtor } from "../models/debtor";
-import Credit from "../models/cretdit";
+import { IDebtor } from "../models/debtor";
+import Credit, {payStatus } from "../models/cretdit";
 import { IUser } from "../models/user";
 import { SmsService } from "./SmsService";
 
@@ -9,11 +9,11 @@ class LoanService {
     if (!payStatus || payStatus === "all") {
       match = { user: currentUser._id };
     } else {
-      match = {user: currentUser._id, isPaidOff: payStatus}
+      match = { user: currentUser._id, isPaidOff: payStatus };
     }
     return Credit.aggregate([
       {
-        $match: match
+        $match: match,
       },
       {
         $group: {
@@ -42,8 +42,8 @@ class LoanService {
         },
       },
       {
-        $sort: { name : 1}
-      }
+        $sort: { name: 1 },
+      },
     ])
       .then((res) => {
         return res;
@@ -53,25 +53,16 @@ class LoanService {
       });
   }
 
-  static async getDebtor(debtorData: IDebtor): Promise<IDebtor> {
-    const debtor: IDebtor | null = await Debtor.findOne({
-      phoneNumber: debtorData.phoneNumber,
-    });
-
-    if (debtor && debtor?.name !== debtorData.name) {
-      throw new Error("This phone number is in use for another person");
+  static getDebtorCredits(
+    currentUser: IUser,
+    debtor: IDebtor,
+    payStatus?: payStatus
+  ) {
+    if (!payStatus) {
+      return Credit.find({ user: currentUser.id, debtor: debtor._id });
+    } else {
+      return Credit.find({ user: currentUser.id, debtor: debtor._id, isPaidOff: payStatus });
     }
-
-    if (debtor) {
-      return debtor;
-    }
-
-    const newDebtor: IDebtor = await new Debtor({
-      phoneNumber: debtorData.phoneNumber,
-      name: debtorData.name,
-    }).save();
-
-    return newDebtor;
   }
 
   static async giveACredit(user: IUser, debtor: IDebtor, creditValue: number) {
