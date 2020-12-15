@@ -1,7 +1,7 @@
 import express from "express";
 import isLogged from "../middlewares/isLogged";
 import { IDebtor } from "../models/debtor";
-import { payStatus } from "../models/cretdit";
+import { payStatus, joiCreditSchema } from "../models/cretdit";
 import DebtorService from "../services/DebtorService";
 import LoanService from "../services/LoanService";
 import { joiPayFilter } from "../utils/queryValidate";
@@ -102,15 +102,15 @@ class LoanSystem {
     try {
       const debtorData: IDebtor = req.body.debtor;
 
-      if (!req.body.creditValue || req.body.creditValue <= 0) {
-        return res.status(422).json("Incorrect credit value!");
-      }
+      await joiCreditSchema.validateAsync(req.body);
+      const { creditValue, creditName } = req.body;
 
       const debtor: IDebtor = await DebtorService.getValidDebtor(debtorData);
       await LoanService.giveACredit(
         res.locals.user,
         debtor,
-        req.body.creditValue
+        creditValue,
+        creditName
       );
     } catch (err) {
       return res.status(422).json(err);

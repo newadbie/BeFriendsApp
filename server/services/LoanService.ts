@@ -1,7 +1,8 @@
 import { IDebtor } from "../models/debtor";
-import Credit, {payStatus } from "../models/cretdit";
+import Credit, { payStatus } from "../models/cretdit";
 import { IUser } from "../models/user";
 import { SmsService } from "./SmsService";
+import crypto from "crypto";
 
 class LoanService {
   static getCountedDebtorCredits(currentUser: IUser, payStatus?: string) {
@@ -61,16 +62,29 @@ class LoanService {
     if (!payStatus) {
       return Credit.find({ user: currentUser.id, debtor: debtor._id });
     } else {
-      return Credit.find({ user: currentUser.id, debtor: debtor._id, isPaidOff: payStatus });
+      return Credit.find({
+        user: currentUser.id,
+        debtor: debtor._id,
+        isPaidOff: payStatus,
+      });
     }
   }
 
-  static async giveACredit(user: IUser, debtor: IDebtor, creditValue: number) {
+  static async giveACredit(
+    user: IUser,
+    debtor: IDebtor,
+    creditValue: number,
+    creditName: string
+  ) {
+    const payCode = crypto.randomBytes(12).toString("hex");
+
     await new Credit({
       user: user,
       debtor: debtor,
       creditValue: creditValue,
       isPaidOff: "unpaid",
+      creditName: creditName,
+      payCode: payCode
     }).save();
 
     const message: string =
