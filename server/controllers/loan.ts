@@ -20,7 +20,7 @@ class LoanSystem {
       isLogged,
       this.getCredits
     );
-    this.router.get(
+    this.router.post(
       "/getDebtorCredits/:payStatus?",
       isLogged,
       this.getDebtorCredits
@@ -33,7 +33,11 @@ class LoanSystem {
     res: express.Response,
     next: express.NextFunction
   ) => {
-    const { _id }: { _id: string } = req.body;
+    const { id }: { id: string } = req.body;
+    if (!id) {
+      return res.status(422).json("Invalid data");
+    }
+
     let payFilter: payStatus | null;
 
     switch (req.query.payStatus?.toString().toLowerCase()) {
@@ -47,11 +51,8 @@ class LoanSystem {
         payFilter = null;
         break;
     }
-    if (!_id) {
-      return res.status(422).json("Invalid data");
-    }
     try {
-      const debtor = await DebtorService.getDebtorById(_id);
+      const debtor = await DebtorService.getDebtorById(id);
       if (!debtor) {
         return res.status(422).json("Invalid data");
       }
@@ -61,7 +62,7 @@ class LoanSystem {
         payFilter ? payFilter : undefined
       );
 
-      return res.status(200).json({ message: "OK", credtis: debtorCredits });
+      return res.status(200).json({ message: "OK", credits: debtorCredits });
     } catch (err) {
       console.log(err);
       return res.status(422).json("Something went wrong");

@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleProp, StyleSheet, Text, TouchableHighlight} from 'react-native'
+import {StyleSheet, Text, TouchableHighlight} from 'react-native'
 
 export interface ButtonProps {
     onPress(): Promise<void> | void,

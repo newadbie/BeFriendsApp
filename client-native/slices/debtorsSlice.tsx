@@ -1,13 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { DebtorState, filterTypes } from "../types";
+import { CreditData, DebtorState, FilterTypes } from "../types";
 import axios from "axios";
-import { debtorData } from "../components/DebtorItem";
+import { DebtorData } from "../types";
 
 export const initialState: DebtorState = {
   debtors: [],
   isLoading: false,
-  filterType: filterTypes.all,
+  filterType: FilterTypes.all,
   selectedDebtor: null,
+};
+
+type PayloadParams = {
+  data: DebtorData;
+  credits: Array<CreditData>;
 };
 
 const debtorSlice = createSlice({
@@ -20,13 +25,13 @@ const debtorSlice = createSlice({
     stopLoading: (state) => {
       state.isLoading = false;
     },
-    changeFilterType: (state, { payload }: PayloadAction<filterTypes>) => {
+    changeFilterType: (state, { payload }: PayloadAction<FilterTypes>) => {
       state.filterType = payload;
     },
-    loadDebtors: (state, { payload }: PayloadAction<Array<debtorData>>) => {
+    loadDebtors: (state, { payload }: PayloadAction<Array<DebtorData>>) => {
       state.debtors = payload;
     },
-    selectDebtor: (state, { payload }: PayloadAction<debtorData>) => {
+    selectDebtor: (state, { payload }: PayloadAction<PayloadParams>) => {
       state.selectedDebtor = payload;
     },
     unSelectDebtor: (state) => {
@@ -41,7 +46,7 @@ export const {
   stopLoading,
   changeFilterType,
   selectDebtor,
-  unSelectDebtor
+  unSelectDebtor,
 } = debtorSlice.actions;
 
 export const fetchDebtors = () => async (dispatch: any, getState: any) => {
@@ -56,6 +61,29 @@ export const fetchDebtors = () => async (dispatch: any, getState: any) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+export const fetchAndSelectDebtor = (debtor: DebtorData) => async (
+  dispatch: any
+) => {
+  dispatch(startLoading());
+  try {
+    const result = await axios.post(
+      "http://192.168.0.241:8080/getDebtorCredits",
+      {
+        id: debtor._id,
+      }
+    );
+    const credits: Array<CreditData> = result.data.credits;
+    const payload: PayloadParams = {
+      data: debtor,
+      credits: credits,
+    };
+    dispatch(selectDebtor(payload));
+  } catch (err) {
+    console.log(err);
+  }
+  dispatch(stopLoading());
 };
 
 export default debtorSlice.reducer;

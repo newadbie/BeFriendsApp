@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { SafeAreaView } from "react-native";
 
-import { debtorData } from "./DebtorItem";
+import { DebtorData } from "../types";
 import { FilterPicker } from "./Picker";
 import { DebtorsList } from "../components/DebtorsList";
 
 type Props = {
-    debtors: Array<debtorData>
+    debtors: Array<DebtorData>
 }
 export const DebtorsScreen : FC<Props> = ({ debtors }) => {
   return (

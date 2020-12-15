@@ -1,4 +1,15 @@
-import { debtorData } from "../components/DebtorItem";
+export type DebtorData = {
+  _id: string;
+  name: string;
+  phoneNumber: number;
+  takenCredits: number;
+  totalCredit: number;
+};
+
+export type CreditData = { 
+  creditName: string,
+  creditValue: number
+}
 
 export interface AuthState {
   userName: string;
@@ -6,16 +17,20 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-export enum filterTypes {
+export enum FilterTypes {
   all = "all",
   paid = "paid",
-  unPaid = "unPaid"
+  unPaid = "unPaid",
 }
 
 export interface DebtorState {
-  debtors: Array<debtorData>;
-  isLoading: boolean,
-  filterType: filterTypes
+  debtors: Array<DebtorData>;
+  isLoading: boolean;
+  filterType: FilterTypes;
+  selectedDebtor: {
+    data: DebtorData,
+    credits: Array<CreditData>  
+  } | null;
 }
 
 export interface RootState {

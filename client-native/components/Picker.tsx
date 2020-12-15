@@ -3,7 +3,7 @@ import { View, Text } from "react-native";
 
 import { widthPercentageToDP } from "react-native-responsive-screen";
 import { Picker } from "@react-native-picker/picker";
-import { filterTypes } from "../types";
+import { FilterTypes } from "../types";
 import { useSelector, useDispatch } from "react-redux";
 import { getDebtors } from "../selectors";
 import { changeFilterType } from "../slices/debtorsSlice";
@@ -11,7 +11,7 @@ import { changeFilterType } from "../slices/debtorsSlice";
 export const FilterPicker = () => {
   const dispatch = useDispatch();
   const filterType = useSelector(getDebtors).filterType;
-  const filterTypeToPolish = (filterType: filterTypes): string => {
+  const filterTypeToPolish = (filterType: FilterTypes): string => {
     switch (filterType) {
       case "all":
         return "Wszystkie";
@@ -23,7 +23,7 @@ export const FilterPicker = () => {
     return "all";
   };
 
-  const setFilterType = (newFilterType: filterTypes) => {
+  const setFilterType = (newFilterType: FilterTypes) => {
     dispatch(changeFilterType(newFilterType));
   };
   return (
@@ -50,7 +50,7 @@ export const FilterPicker = () => {
         onValueChange={(itemValue: any) => setFilterType(itemValue)}
         style={{ width: widthPercentageToDP("70%") }}
       >
-        {Object.entries(filterTypes).map((item, key) => {
+        {Object.entries(FilterTypes).map((item, key) => {
           return (
             <Picker.Item
               label={filterTypeToPolish(item[1])}

@@ -1,25 +1,18 @@
 import React, { FC } from "react";
-import { TouchableHighlight,View, Text, StyleSheet } from "react-native";
+import { TouchableHighlight, View, Text, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { selectDebtor } from "../slices/debtorsSlice";
-
-export type debtorData = {
-  _id?: null;
-  name: string;
-  phoneNumber: number;
-  takenCredits: number;
-  totalCredit: number;
-};
+import { fetchAndSelectDebtor, selectDebtor } from "../slices/debtorsSlice";
+import { DebtorData } from "../types";
 
 export interface DebtorItemProps {
-  debtor: debtorData;
+  debtor: DebtorData;
 }
 
 export const DebtorItem: FC<DebtorItemProps> = ({ debtor }) => {
   const dispatch = useDispatch();
   const selectDebtorHandler = () => {
-    dispatch(selectDebtor(debtor));
-  }
+    dispatch(fetchAndSelectDebtor(debtor));
+  };
 
   const phoneNumber = debtor.phoneNumber
     .toString()
@@ -28,8 +21,8 @@ export const DebtorItem: FC<DebtorItemProps> = ({ debtor }) => {
   return (
     <TouchableHighlight style={styles.container} onPress={selectDebtorHandler}>
       <>
-      <Text style={styles.name}>{debtor.name}</Text>
-      <Text style={styles.phoneNumber}>{phoneNumber}</Text>
+        <Text style={styles.name}>{debtor.name}</Text>
+        <Text style={styles.phoneNumber}>{phoneNumber}</Text>
       </>
     </TouchableHighlight>
   );
