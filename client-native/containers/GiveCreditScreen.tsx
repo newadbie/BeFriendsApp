@@ -43,6 +43,7 @@ export const GiveCreditScreen: React.FC<SpinerChildrenState> = ({
         setPhoneNumber("");
         setDebtorName("");
         setCreditValue("");
+        setCreditName("");
         dispatch(fetchDebtors());
       })
       .catch((err) => {

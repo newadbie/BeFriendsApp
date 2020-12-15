@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { TouchableHighlight, View, Text, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { fetchAndSelectDebtor, selectDebtor } from "../slices/debtorsSlice";
+import { fetchAndSelectDebtor } from "../slices/debtorsSlice";
 import { DebtorData } from "../types";
 
 export interface DebtorItemProps {

@@ -12,16 +12,15 @@ export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
   setLoadingState,
 }) => {
   const isLoading = useSelector(getDebtors).isLoading;
-  const isDebtorSelected = useSelector(getDebtors).selectedDebtor;
+  const selectedDebtor = useSelector(getDebtors).selectedDebtor;
   const debtors = useSelector(getDebtors).debtors;
   const filterType = useSelector(getDebtors).filterType;
 
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     dispatch(fetchDebtors());
-  }, [ ,filterType]);
+  }, [, filterType]);
 
   useEffect(() => {
     setLoadingState(isLoading);
@@ -29,7 +28,14 @@ export const DebtorsScreen: React.FC<SpinerChildrenState> = ({
 
   return (
     <View style={{ flex: 1 }}>
-      {isDebtorSelected ? <DebtorDetails /> : <DS debtors={debtors} />}
+      {selectedDebtor ? (
+        <DebtorDetails
+          debtor={selectedDebtor.data}
+          credits={selectedDebtor.credits}
+        />
+      ) : (
+        <DS debtors={debtors} />
+      )}
     </View>
   );
 };
