@@ -51,6 +51,7 @@ export const {
 
 export const fetchDebtors = () => async (dispatch: any, getState: any) => {
   dispatch(startLoading());
+  dispatch(unSelectDebtor());
   try {
     const { filterType } = getState()["debtorState"];
     const result = await axios.get(
